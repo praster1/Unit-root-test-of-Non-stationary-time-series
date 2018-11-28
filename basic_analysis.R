@@ -23,7 +23,6 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 # getCalcVec(dataVec, datetimeIndexVec, calc="last")
 
 
-
 data = read.csv("./datasets/buildingA_15min.csv")
 dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
@@ -31,9 +30,12 @@ datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), 
 
 # 1일 단위로 하려면 YYYYMMDD
 # 1시간 단위로 하려면 YYYYMMDDHH
-indexVec = getUniqVec(datetime, index="YYYYMMDD")
+indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")
 res = getCalcVec(dataVec, indexVec, calc="sum")
-cbind(indexVec, res)
+temp = cbind(indexVec, res)
+
+
+
 
 
 

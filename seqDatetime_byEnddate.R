@@ -13,7 +13,7 @@ seqDatetime_byEnddate = function(startDate = "2000-01-01", endDate = "2000-01-02
 	if (split <= 0)					{	stop("split must be greater than 0.")					}
 	
 	# seqData 생성
-	splitDates = startDate;
+	splitDates = as.POSIXct("0000-01-01")
 	while(startDate <= endDate)
 	{
 		plusTime = seq(1, (60*60*24), length=split)
@@ -23,5 +23,7 @@ seqDatetime_byEnddate = function(startDate = "2000-01-01", endDate = "2000-01-02
 	
 	splitDates = unique(splitDates)
 	splitDates = splitDates[which(splitDates < endDate)]
-	return(sort(splitDates))
+    splitDates = sort(splitDates)
+    splitDates = splitDates[-1]
+	return(splitDates)
 }

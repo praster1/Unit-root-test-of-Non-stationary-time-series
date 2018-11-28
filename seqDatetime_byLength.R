@@ -12,7 +12,7 @@ seqDatetime_byLength = function(startDate = "2000-01-01", length = 100, split = 
 	startDate = as.POSIXct(startDate)
 
 	# seqData 생성
-	splitDates = startDate;
+	splitDates = as.POSIXct("0000-01-01")
 	while(length(splitDates) <= length)
 	{
 		plusTime = seq(1, (60*60*24), length=split)
@@ -22,5 +22,6 @@ seqDatetime_byLength = function(startDate = "2000-01-01", length = 100, split = 
 	
 	splitDates = unique(splitDates)
 	splitDates = sort(splitDates)
+    splitDates = splitDates[-1]
 	return(splitDates[1:length])
 }
