@@ -19,6 +19,8 @@ getCalcVec = function(dataVec, datetimeIndexVec, calc="last")
             resVec = c(resVec, min(temp))
         } else if (calc == "max") {
             resVec = c(resVec, max(temp))
+        } else if (calc == "sum") {
+            resVec = c(resVec, sum(temp))
         } else if (calc == "mean") {
             resVec = c(resVec, mean(temp))
         } else if (calc == "median") {
