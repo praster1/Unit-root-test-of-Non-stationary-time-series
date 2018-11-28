@@ -5,51 +5,33 @@ rm(list = ls())
 # Building C : 하나과학관
 
 
-setwd("/home/lv999/Dropbox/__Research/KEPCO/고려대학교 전력데이터")
+setwd("/home/lv999/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
 # setwd("E:/Dropbox/__GoogleDrive/DAVIAN_SharedFolder/_Proposals/2017_KEPCO/고려대학교 전력데이터/")
 # setwd("D:/Jaeseong/Dropbox_New/Dropbox/__GoogleDrive/DAVIAN_SharedFolder/_Proposals/2017_KEPCO/고려대학교 전력데이터/")
 # setwd("D:/Dropbox/__GoogleDrive/DAVIAN_SharedFolder/_Proposals/2017_KEPCO/고려대학교 전력데이터/")
 
 
 
+source("seqDatetime_byEnddate.R")   # 시작일(startDate)부터 종료일(endDate) 직전까지 날짜 벡터 구하기
+#seqDatetime_byEnddate(startDate="2000-01-01", endDate="2000-01-04", split=7)
 
-
-source("seqDatetime_byEnddate.R")
-seqDatetime_byEnddate(startDate="2000-01-01", endDate="2000-01-04", split=7)
-
-source("seqDatetime_byLength.R")
-seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
-
+source("seqDatetime_byLength.R")    # 시작일(startDate)부터 길이(length)만큼 날짜 벡터 구하기
+# seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
 
 
 
+source("getUniqVec.R")  # datetime의 index를 구하는 함수
+# getUniqVec(datetimeVec, index="YYYYMMDDHHMMDD")
+source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 등을 구하는 함수
+# getCalcVec(dataVec, datetimeVec, indexVec, calc="last")
 
-data = read.csv("./_data_backup_03_with_features_fileEncryption/data_BuildingA_15min.csv")
+
+
+data = read.csv("./datasets/buildingA_15min.csv")
 dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
 
-
-
-# split의 시작값, 종료값, 평균값, 중앙값 구하는 함수가 필요
-source("getUniqVec.R")
-
-
-calcVec = function(dataVec, datetimeVec, index="YYYYMMDDHHMMDD", calc="last")
-# unique index
-    uniq = unique(idx)
-    uniq_len = length(uniq)
-    
-    
-    for (i in 1:uniq_len)
-    {
-        uniqIdx = which(uniq[1] == idx)
-        
-    }
-
-
-
-
-
+indexVec = getUniqVec(datetime, index="YYYYMMDD")
 
 
 

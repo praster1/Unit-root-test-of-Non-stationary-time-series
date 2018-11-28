@@ -1,4 +1,5 @@
-getUniqVec = function(dataVec, datetimeVec, index="YYYYMMDDHHMMDD")
+# datetime의 index를 구하는 함수
+getUniqVec = function(datetimeVec, index="YYYYMMDDHHMMDD")
 {
     YYYY = substr(datetimeVec, 1, 4)                             #YYYY
     YYYYMM = substr(datetimeVec, 1, 7)                        #YYYY-MM
@@ -6,7 +7,6 @@ getUniqVec = function(dataVec, datetimeVec, index="YYYYMMDDHHMMDD")
     YYYYMMDDHH = substr(datetimeVec, 1, 13)              # YYYY-MM-DD HH
     YYYYMMDDHHMM = substr(datetimeVec, 1, 16)         # YYYY-MM-DD HH:MM
     YYYYMMDDHHMMSS = substr(datetimeVec, 1, 19)     # YYYY-MM-DD HH:MM:SS
-    
     
     # index 만들기
     idx = NULL;
