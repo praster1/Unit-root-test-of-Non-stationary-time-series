@@ -28,7 +28,20 @@ data = read.csv("./_data_backup_03_with_features_fileEncryption/data_BuildingA_1
 dataVec = data[,5]
 timedate = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
 
+
+
 # split의 시작값, 종료값, 평균값, 중앙값 구하는 함수가 필요
+
+
+
+
+
+
+
+
+
+
+
 
 
 
