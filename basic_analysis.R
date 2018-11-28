@@ -1,31 +1,61 @@
 rm(list = ls())
 
-setwd("E:/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
+# Building A : 녹지캠
+# Building B : 인문대
+# Building C : 하나과학관
+
+
+setwd("/home/lv999/Dropbox/__Research/KEPCO/고려대학교 전력데이터")
+# setwd("E:/Dropbox/__GoogleDrive/DAVIAN_SharedFolder/_Proposals/2017_KEPCO/고려대학교 전력데이터/")
+# setwd("D:/Jaeseong/Dropbox_New/Dropbox/__GoogleDrive/DAVIAN_SharedFolder/_Proposals/2017_KEPCO/고려대학교 전력데이터/")
+# setwd("D:/Dropbox/__GoogleDrive/DAVIAN_SharedFolder/_Proposals/2017_KEPCO/고려대학교 전력데이터/")
 
 
 
 
-data = read.csv("./datasets/buildingA_15min.csv")
-# data = data[,-ncol(data)]
+
+source("seqDatetime_byEnddate.R")
+seqDatetime_byEnddate(startDate="2000-01-01", endDate="2000-01-04", split=7)
+
+source("seqDatetime_byLength.R")
+seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
+
+
+
+
+
+data = read.csv("./_data_backup_03_with_features_fileEncryption/data_BuildingA_15min.csv")
+dataVec = data[,5]
+timedate = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
+
+# split의 시작값, 종료값, 평균값, 중앙값 구하는 함수가 필요
+
+
 
 timedate = as.numeric(paste(data[,3], formatC(data[,4], width=4, flag="0"), sep=""))
 year = substr(data[,3], 1, 4)
 newData = cbind(data, year)
-dataVec = data[,5]
+
+
+
+
 
 
 
 plotAll = function(main = "ADF Test")
 {
 	# init
+    par(mfrow = c(1, 1))
 	plot(dataVec, type="l", main=main, xlab="", ylab="power consumption(kWh)", axes=FALSE)
 
 	# y축 axis
 	axis(2, dataVec, labels=seq(0, max(dataVec), by=50), at=seq(0, max(dataVec), by=50))
 
 	# x축 axis  년도
-	min2015 = min(which(year == "2015"));	min2016 = min(which(year == "2016"))
-	min2017 = min(which(year == "2017"));	min2018 = min(which(year == "2018"))
+	min2015 = min(which(year == "2015"));
+	min2016 = min(which(year == "2016"))
+	min2017 = min(which(year == "2017"));
+	min2018 = min(which(year == "2018"))
 	axis(1, c(min2015, min2016, min2017, min2018), labels = c("2015", "2016", "2017", "2018"), line=1)
 	mtext("Year",1,line=1,at=0.2)
 
@@ -33,21 +63,67 @@ plotAll = function(main = "ADF Test")
 	season = newData[,13]
 	yearmonth = substr(data[,3], 1, 6)
 
-	month201509 = which(yearmonth=="201509");	month201510 = which(yearmonth=="201510");	month201511 = which(yearmonth=="201511");	month201512 = which(yearmonth=="201512")
-	month201601 = which(yearmonth=="201601");	month201602 = which(yearmonth=="201602");	month201603 = which(yearmonth=="201603");	month201604 = which(yearmonth=="201604")
-	month201605 = which(yearmonth=="201605");	month201606 = which(yearmonth=="201606");	month201607 = which(yearmonth=="201607");	month201608 = which(yearmonth=="201608")
-	month201609 = which(yearmonth=="201609");	month201610 = which(yearmonth=="201610");	month201611 = which(yearmonth=="201611");	month201612 = which(yearmonth=="201612")
-	month201701 = which(yearmonth=="201701");	month201702 = which(yearmonth=="201702");	month201703 = which(yearmonth=="201703");	month201704 = which(yearmonth=="201704")
-	month201705 = which(yearmonth=="201705");	month201706 = which(yearmonth=="201706");	month201707 = which(yearmonth=="201707");	month201708 = which(yearmonth=="201708")
-	month201709 = which(yearmonth=="201709");	month201710 = which(yearmonth=="201710");	month201711 = which(yearmonth=="201711");	month201712 = which(yearmonth=="201712")
-	month201801 = which(yearmonth=="201801");	month201802 = which(yearmonth=="201802")
+	month201509 = which(yearmonth=="201509");	
+	month201510 = which(yearmonth=="201510");	
+	month201511 = which(yearmonth=="201511");	
+	month201512 = which(yearmonth=="201512")
+	month201601 = which(yearmonth=="201601");	
+	month201602 = which(yearmonth=="201602");	
+	month201603 = which(yearmonth=="201603");	
+	month201604 = which(yearmonth=="201604")
+	month201605 = which(yearmonth=="201605");	
+	month201606 = which(yearmonth=="201606");	
+	month201607 = which(yearmonth=="201607");	
+	month201608 = which(yearmonth=="201608")
+	month201609 = which(yearmonth=="201609");	
+	month201610 = which(yearmonth=="201610");	
+	month201611 = which(yearmonth=="201611");	
+	month201612 = which(yearmonth=="201612")
+	month201701 = which(yearmonth=="201701");	
+	month201702 = which(yearmonth=="201702");	
+	month201703 = which(yearmonth=="201703");	
+	month201704 = which(yearmonth=="201704")
+	month201705 = which(yearmonth=="201705");	
+	month201706 = which(yearmonth=="201706");	
+	month201707 = which(yearmonth=="201707");	
+	month201708 = which(yearmonth=="201708")
+	month201709 = which(yearmonth=="201709");	
+	month201710 = which(yearmonth=="201710");	
+	month201711 = which(yearmonth=="201711");	
+	month201712 = which(yearmonth=="201712")
+	month201801 = which(yearmonth=="201801");	
+	month201802 = which(yearmonth=="201802")
 	
-	axis_vec = c(	min(month201509),	min(month201510),	min(month201511),	min(month201512),
-							min(month201601),	min(month201602),	min(month201603),	min(month201604),	min(month201605),	min(month201606),
-							min(month201607),	min(month201608),	min(month201609),	min(month201610),	min(month201611),	min(month201612),
-							min(month201701),	min(month201702),	min(month201703),	min(month201704),	min(month201705),	min(month201706),
-							min(month201707),	min(month201708),	min(month201709),	min(month201710),	min(month201711),	min(month201712),
-							min(month201801),	min(month201802))
+	axis_vec = c(	min(month201509),
+						min(month201510),
+						min(month201511),
+						min(month201512),
+						min(month201601),
+						min(month201602),
+						min(month201603),
+						min(month201604),
+						min(month201605),
+						min(month201606),
+						min(month201607),
+						min(month201608),
+						min(month201609),
+						min(month201610),
+						min(month201611),
+						min(month201612),
+						min(month201701),
+						min(month201702),
+						min(month201703),
+						min(month201704),
+						min(month201705),
+						min(month201706),
+						min(month201707),
+						min(month201708),
+						min(month201709),
+						min(month201710),
+						min(month201711),
+						min(month201712),
+						min(month201801),
+						min(month201802))
 	
 	monthVec = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
 	monthVec = c(monthVec[9:12], monthVec, monthVec, monthVec[1:2])
