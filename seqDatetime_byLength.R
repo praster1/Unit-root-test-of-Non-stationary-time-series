@@ -1,3 +1,4 @@
+# 시작일(startDate)부터 길이(length)만큼 날짜 벡터 구하기
 seqDatetime_byLength = function(startDate = "2000-01-01", length = 100, split = 96)
 {
 	# split은 0보다 커야 한다.

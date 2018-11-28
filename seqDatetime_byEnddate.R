@@ -1,3 +1,4 @@
+# 시작일(startDate)부터 종료일(endDate) 직전까지 날짜 벡터 구하기
 seqDatetime_byEnddate = function(startDate = "2000-01-01", endDate = "2000-01-02", split = 96)
 {
 	# YYYY-MM-DD HH:MM:SS 타입으로 전환

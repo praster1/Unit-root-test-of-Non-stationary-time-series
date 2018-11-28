@@ -26,14 +26,25 @@ seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
 
 data = read.csv("./_data_backup_03_with_features_fileEncryption/data_BuildingA_15min.csv")
 dataVec = data[,5]
-timedate = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
+datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
 
 
 
 # split의 시작값, 종료값, 평균값, 중앙값 구하는 함수가 필요
+source("getUniqVec.R")
 
 
-
+calcVec = function(dataVec, datetimeVec, index="YYYYMMDDHHMMDD", calc="last")
+# unique index
+    uniq = unique(idx)
+    uniq_len = length(uniq)
+    
+    
+    for (i in 1:uniq_len)
+    {
+        uniqIdx = which(uniq[1] == idx)
+        
+    }
 
 
 
