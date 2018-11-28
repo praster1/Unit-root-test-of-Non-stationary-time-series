@@ -84,15 +84,6 @@ plotAll = function(dataVec, datetimeVec, main = "Main")
 }
 
 
-getPartialData = function(dataVec, partialLength, stepSize)
-{
-    if (is.null(partialLength))         {        stop("partialLength is NULL.");    }
-    if (is.null(stepSize))               {        stop("stepSize is NULL.");    }
-    if (partialLength < stepSize)    {        stop("partialLength must greater than stepSize");    }
-    
-    
-    
-}
 
 
 
