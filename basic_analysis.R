@@ -23,7 +23,7 @@ source("seqDatetime_byLength.R")    # 시작일(startDate)부터 길이(length)�
 source("getUniqVec.R")  # datetime의 index를 구하는 함수
 # getUniqVec(datetimeVec, index="YYYYMMDDHHMMDD")
 source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 등을 구하는 함수
-# getCalcVec(dataVec, datetimeVec, indexVec, calc="last")
+# getCalcVec(dataVec, datetimeIndexVec, calc="last")
 
 
 
@@ -32,7 +32,7 @@ dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
 
 indexVec = getUniqVec(datetime, index="YYYYMMDD")
-
+res = getCalcVec(dataVec, indexVec, calc="last")
 
 
 

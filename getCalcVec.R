@@ -1,14 +1,14 @@
 # split의 시작값, 종료값, 평균값, 중앙값 등을 구하는 함수
-getCalcVec = function(dataVec, datetimeVec, indexVec, calc="last")
+getCalcVec = function(dataVec, datetimeIndexVec, calc="last")
 {
     # unique index
-    uniq = unique(indexVec)
+    uniq = unique(datetimeIndexVec)
     uniq_len = length(uniq)
     
     resVec = NULL;
     for (i in 1:uniq_len)
     {
-        uniqIndex = which(indexVec == uniq[i])   # indexVec에 따라 일자 선택
+        uniqIndex = which(datetimeIndexVec == uniq[i])   # datetimeIndexVec에 따라 일자 선택
         temp = dataVec[uniqIndex]   # 선택된 일자에 해당하는 dataVec
         
         if (calc == "first") {              # 시작값
