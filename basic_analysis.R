@@ -31,57 +31,59 @@ res = getCalcVec(dataVec, indexVec, calc="sum")
 temp = cbind(indexVec, res)
 
 
+source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
+sampleVec = getPartialData(dataVec, partialLength=96, stepSize=10)
 
 
 
-
-
-
+source("plotAll.R")
+plotAll(dataVec, datetime)
 
 library(urca)
-lc.ct = ur.df(res, lags=3, type='trend')		# ADF Test: Trend
-# lc.ct = ur.df(res, lags=3, type='drift')		# ADF Test: Drift
-# lc.ct = ur.pp(res, type='Z-tau', model='trend', lags='long')		# PP Test: Trend
-# lc.ct = ur.pp(res, type='Z-tau', model='constant', lags='long')		# PP Test: constant
-# lc.ct = ur.ers(res, type="DF-GLS", model="trend", lag.max=4)	# ERS Test: DF-GLS: Trend
-# lc.ct = ur.ers(res, type="P-test", model="trend")		# ERS Test: P-Test
-# lc.ct = ur.sp(res, type="tau", pol.deg=2, signif=0.05)		# SP Test: tau
-# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# SP Test: rho
-# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
+# lc.ct = ur.df(vec, lags=3, type='trend')		# ADF Test: Trend
+# lc.ct = ur.df(vec, lags=3, type='drift')		# ADF Test: Drift
+# lc.ct = ur.pp(vec, type='Z-tau', model='trend', lags='long')		# PP Test: Trend
+# lc.ct = ur.pp(vec, type='Z-tau', model='constant', lags='long')   # PP Test: constant
+# lc.ct = ur.ers(vec, type="DF-GLS", model="trend", lag.max=4)	# ERS Test: DF-GLS: Trend
+# lc.ct = ur.ers(vec, type="P-test", model="trend")		# ERS Test: P-Test
+# lc.ct = ur.sp(vec, type="tau", pol.deg=2, signif=0.05)		# SP Test: tau
+# lc.ct = ur.sp(vec, type="rho", pol.deg=2, signif=0.05)		# SP Test: rho
+# lc.ct = ur.sp(vec, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
+
+# analysisRes = lapply(sampleVec$data, ur.df, lags=3, type='trend')                                         # ADF Test: Trend
+analysisRes = lapply(sampleVec$data, ur.df, lags=3, type='drift')                                           # ADF Test: Drift
+# analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='trend', lags='long')             # PP Test: Trend
+# analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='constant', lags='long')        # PP Test: constant
+# analysisRes = lapply(sampleVec$data, ur.ers, type='DF-GLS', model='trend', lag.max=4)          # ERS Test: DF-GLS: Trend
+# analysisRes = lapply(sampleVec$data, ur.ers, type='P-test', model='trend')                            # ERS Test: P-Test
+# analysisRes = lapply(sampleVec$data, ur.sp, type='tau', pol.deg=2, signif=0.05)                      # SP Test: tau
+# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=0.05)                               # SP Test: rho
+# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=0.05)                               # KPSS Test: rho
+
+
+len = length(sampleVec$data)
+for (i in 1:len)
+{
+    testStat = analysisRes[[i]]@teststat[1]
+    cval = analysisRes[[i]]@cval[1,2]
+    print(paste("i:", i, "/", len, "     ", testStat < cval))
+    if (testStat < cval)
+    {
+        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
+    }
+}
+
+
+
+
+
+# A = lapply(sampleVec, ur.df, lags=3, type="trend")
+
+
+
 
 testStat = lc.ct@testreg$fstatistic
 resPVal = 1 - pf(testStat[1], testStat[2], testStat[3])
-
-
-
-
-plotAll = function(dataVec, datetimeVec, main = "Main")
-{
-	# init
-    par(mfrow = c(1, 1))
-	plot(dataVec, type="l", main=main, xlab="", ylab="power consumption(kWh)", axes=FALSE)
-
-	# y축 axis
-	axis(2, dataVec, labels=seq(0, max(dataVec), by=50), at=seq(0, max(dataVec), by=50))
-
-	# x축 axis  년도
-    source("getIndexVec.R")  # dataVec의 unique 값이 위치하는 최소/최대 index를 출력한다.
-    year = getUniqVec(datetime, index="YYYY")
-    yearIndex = getIndexVec(year, func="min")
-	
-    axis(1, yearIndex, labels = unique(year), line=1)
-	mtext("Year",1,line=1,at=0.2)
-
-	# x축 axis: 월
-	yearmonth = getUniqVec(datetime, index="YYYYMM")	
-    yearmonthIndex = getIndexVec(yearmonth, func="min")
-	
-	monthVec = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
-	monthVec = substr(unique(yearmonth), 6, 8)
-	
-	axis(1, yearmonthIndex, labels = monthVec, line=3)
-	mtext("Month", 1, line=3, at=0.2)
-}
 
 
 
@@ -134,99 +136,19 @@ for (k in 3:7)
 
 
 
-# install.packages("urca")
-library(urca)
-
-par(mfrow = c(5, 1))
-
-temp = c(0.2, 0.4, 0.6, 0.8, 1)
-for (k in 3:7)
-{
-	for (j in 1:5)
-	{
-		# Partial Len >= Step Size
-		# partialLen = 95*3		# Partial Length - 1
-		partialLen = 95*k		# Partial Length - 1
-		# stepLen = ceiling(95*0.8)		# Step Size
-		# stepLen = ceiling(partialLen*0.2)		# Step Size
-		stepLen = ceiling(partialLen*temp[j])		# Step Size
-
-		plotAll(main=paste("SP Test: rho // Partial Len = ", partialLen, " / Step Size = ", stepLen, sep=""))
-
-		for (i in seq((partialLen+1), length(dataVec), by=stepLen))
-		{
-			vec = dataVec[(i-partialLen):i]
-			# lc.ct = ur.sp(vec, type="tau", pol.deg=2, signif=0.05)		# SP Test: tau
-			lc.ct = ur.sp(vec, type="rho", pol.deg=2, signif=0.05)		# SP Test: rho
-			# lc.ct = ur.sp(vec, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
-			
-			# testStat = lc.ct@testreg$fstatistic
-			# resPVal = 1 - pf(testStat[1], testStat[2], testStat[3])
-			
-			# print(paste("i:", i, "/", length(dataVec), "     ", resPVal))
-            if(!is.nan(lc.ct@teststat))
-            {
-                print(paste("i:", i, "/", length(dataVec), "     ", lc.ct@teststat, "     ", lc.ct@cval, "     ", lc.ct@teststat < lc.ct@cval))
-                if (lc.ct@teststat < lc.ct@cval)
-                {
-                    points((i-partialLen):i, vec, type="l", col="red");	
-                }
-            }			
-		}
-	}
-}
 
 
 
-
-
-
-
-
-# install.packages("urca")
-library(urca)
-
-par(mfrow = c(5, 1))
-
-temp = c(0.2, 0.4, 0.6, 0.8, 1)
-for (k in 3:7)
-{
-	for (j in 1:5)
-	{
-		# Partial Len >= Step Size
-		# partialLen = 95*3		# Partial Length - 1
-		partialLen = 95*k		# Partial Length - 1
-		# stepLen = ceiling(95*0.8)		# Step Size
-		# stepLen = ceiling(partialLen*0.2)		# Step Size
-		stepLen = ceiling(partialLen*temp[j])		# Step Size
-
-		plotAll(main=paste("SP Test: rho // Partial Len = ", partialLen, " / Step Size = ", stepLen, sep=""))
-
-		for (i in seq((partialLen+1), length(dataVec), by=stepLen))
-		{
-			vec = dataVec[(i-partialLen):i]
-			# lc.ct = ur.sp(vec, type="tau", pol.deg=2, signif=0.05)		# SP Test: tau
-			# lc.ct = ur.sp(vec, type="rho", pol.deg=2, signif=0.05)		# SP Test: rho
-			lc.ct = ur.sp(vec, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
-			
-			# testStat = lc.ct@testreg$fstatistic
-			# resPVal = 1 - pf(testStat[1], testStat[2], testStat[3])
-			
-			# print(paste("i:", i, "/", length(dataVec), "     ", resPVal))
-            if(!is.nan(lc.ct@teststat))
-            {
-                print(paste("i:", i, "/", length(dataVec), "     ", lc.ct@teststat, "     ", lc.ct@cval, "     ", lc.ct@teststat < lc.ct@cval))
-                if (lc.ct@teststat > lc.ct@cval)
-                {
-                    points((i-partialLen):i, vec, type="l", col="red");	
-                }
-            }			
-		}
-	}
-}
-
-
-
+df <- data.frame(Month=seq(1,12),
+                 Value = rnorm(12,0,1),
+                 Season = c('Winter', 'Winter', 'Spring',
+                            'Spring', 'Spring', 'Summer',
+                            'Summer', 'Summer', 'Fall',
+                            'Fall', 'Fall', 'Winter'))
+attach(df)
+plot(Value~Month, type="n")
+rect(df$Month-0.5, min(df$Value), df$Month+0.5, max(df$Value), col=df$Season, lty=0)
+lines(Value~Month, data=df, type='l', col="orange", lwd=2)
 
 
 

@@ -1,4 +1,5 @@
 # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
+# return: data, index
 getPartialData = function(dataVec, partialLength, stepSize)
 {
     if (is.null(partialLength))         {        stop("partialLength is NULL.");    }
@@ -8,15 +9,19 @@ getPartialData = function(dataVec, partialLength, stepSize)
     
     dataLen = length(dataVec)
     
-    res = NULL;
+    resData = NULL;
+    resIndex = NULL;
 
-    i = 1;  resCounter = 1
+    i = 1;
+    resDataCounter = 1
     while(max(i+partialLength-1) < dataLen)
     {
-        res[[resCounter]] = dataVec[i:(i+partialLength-1)]
+        resIndex[[resDataCounter]] = i:(i+partialLength-1)
+        resData[[resDataCounter]] = dataVec[resIndex[[resDataCounter]]]
         i = i + stepSize
-        resCounter = resCounter + 1;
+        resDataCounter = resDataCounter + 1;
     }
     
+    res = list(data=resData, index=resIndex)
     return(res)
 }
