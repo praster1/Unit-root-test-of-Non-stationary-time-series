@@ -1,3 +1,15 @@
+library(urca)
+# lc.ct = ur.df(res, lags=3, type='trend')		# ADF Test: Trend
+# lc.ct = ur.df(res, lags=3, type='drift')		# ADF Test: Drift
+# lc.ct = ur.pp(res, type='Z-tau', model='trend', lags='long')		# PP Test: Trend
+# lc.ct = ur.pp(res, type='Z-tau', model='constant', lags='long')   # PP Test: constant
+# lc.ct = ur.ers(res, type="DF-GLS", model="trend", lag.max=4)	# ERS Test: DF-GLS: Trend
+# lc.ct = ur.ers(res, type="P-test", model="trend")		# ERS Test: P-Test
+# lc.ct = ur.sp(res, type="tau", pol.deg=2, signif=0.05)		# SP Test: tau
+# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# SP Test: rho
+# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
+
+
 # A = lapply(sampleVec, ur.df, lags=3, type="trend")
 
 

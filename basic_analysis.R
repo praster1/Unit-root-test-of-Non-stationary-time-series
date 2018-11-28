@@ -42,22 +42,12 @@ source("plotAll.R")
 plotAll(dataVec, datetime)
 
 library(urca)
-# lc.ct = ur.df(res, lags=3, type='trend')		# ADF Test: Trend
-# lc.ct = ur.df(res, lags=3, type='drift')		# ADF Test: Drift
-# lc.ct = ur.pp(res, type='Z-tau', model='trend', lags='long')		# PP Test: Trend
-# lc.ct = ur.pp(res, type='Z-tau', model='constant', lags='long')   # PP Test: constant
-# lc.ct = ur.ers(res, type="DF-GLS", model="trend", lag.max=4)	# ERS Test: DF-GLS: Trend
-# lc.ct = ur.ers(res, type="P-test", model="trend")		# ERS Test: P-Test
-# lc.ct = ur.sp(res, type="tau", pol.deg=2, signif=0.05)		# SP Test: tau
-# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# SP Test: rho
-# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
 
-
-analysisRes = lapply(sampleVec$data, ur.df, lags=1, type='trend')                                         # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, lags=3, type='drift')                                           # ADF Test: Drift
+# analysisRes = lapply(sampleVec$data, ur.df, lags=1, type='trend')                                         # ADF Test: Trend
+# analysisRes = lapply(sampleVec$data, ur.df, lags=1, type='drift')                                           # ADF Test: Drift
 # analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='trend', lags='long')             # PP Test: Trend
 # analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='constant', lags='long')        # PP Test: constant
-# analysisRes = lapply(sampleVec$data, ur.ers, type='DF-GLS', model='trend', lag.max=4)          # ERS Test: DF-GLS: Trend
+analysisRes = lapply(sampleVec$data, ur.ers, type='DF-GLS', model='trend', lag.max=4)          # ERS Test: DF-GLS: Trend
 # analysisRes = lapply(sampleVec$data, ur.ers, type='P-test', model='trend')                            # ERS Test: P-Test
 # analysisRes = lapply(sampleVec$data, ur.sp, type='tau', pol.deg=2, signif=0.05)                      # SP Test: tau
 # analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=0.05)                               # SP Test: rho
