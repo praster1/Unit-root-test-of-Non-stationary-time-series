@@ -9,8 +9,10 @@ setwd("/home/lv999/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
 
 
 
-source("seqDatetime_byEnddate.R")   # 시작일(startDate)부터 종료일(endDate) 직전까지 날짜 벡터 구하기      #seqDatetime_byEnddate(startDate="2000-01-01", endDate="2000-01-04", split=7)
-source("seqDatetime_byLength.R")    # 시작일(startDate)부터 길이(length)만큼 날짜 벡터 구하기       # seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
+source("seqDatetime_byEnddate.R")   # 시작일(startDate)부터 종료일(endDate) 직전까지 날짜 벡터 구하기      
+#seqDatetime_byEnddate(startDate="2000-01-01", endDate="2000-01-04", split=7)
+source("seqDatetime_byLength.R")    # 시작일(startDate)부터 길이(length)만큼 날짜 벡터 구하기
+# seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
 
 
 source("getUniqVec.R")  # datetime의 index를 구하는 함수       # getUniqVec(datetimeVec, index="YYYYMMDDHHMMDD")
@@ -32,7 +34,7 @@ temp = cbind(indexVec, res)
 
 
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
-sampleVec = getPartialData(dataVec, partialLength=96, stepSize=10)
+sampleVec = getPartialData(dataVec, partialLength=96*3, stepSize=96)
 
 
 
@@ -51,8 +53,8 @@ library(urca)
 # lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
 
 
-# analysisRes = lapply(sampleVec$data, ur.df, lags=3, type='trend')                                         # ADF Test: Trend
-analysisRes = lapply(sampleVec$data, ur.df, lags=3, type='drift')                                           # ADF Test: Drift
+analysisRes = lapply(sampleVec$data, ur.df, lags=1, type='trend')                                         # ADF Test: Trend
+# analysisRes = lapply(sampleVec$data, ur.df, lags=3, type='drift')                                           # ADF Test: Drift
 # analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='trend', lags='long')             # PP Test: Trend
 # analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='constant', lags='long')        # PP Test: constant
 # analysisRes = lapply(sampleVec$data, ur.ers, type='DF-GLS', model='trend', lag.max=4)          # ERS Test: DF-GLS: Trend
@@ -73,8 +75,3 @@ for (i in 1:len)
         points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
     }
 }
-
-
-
-
-

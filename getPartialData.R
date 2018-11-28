@@ -2,10 +2,10 @@
 # return: data, index
 getPartialData = function(dataVec, partialLength, stepSize)
 {
-    if (is.null(partialLength))         {        stop("partialLength is NULL.");    }
-    if (is.null(stepSize))               {        stop("stepSize is NULL.");    }
-    if (partialLength < stepSize)    {        stop("partialLength must greater than stepSize");    }
-    if (partialLength > dataVec)    {        stop("dataVec must greater than partialLength");    }
+    if (is.null(partialLength))                     {        stop("partialLength is NULL.");    }
+    if (is.null(stepSize))                          {        stop("stepSize is NULL.");    }
+    if (partialLength < stepSize)               {        stop("partialLength must greater than stepSize");    }
+    if (partialLength > length(dataVec))     {        stop("dataVec must greater than partialLength");    }
     
     dataLen = length(dataVec)
     
