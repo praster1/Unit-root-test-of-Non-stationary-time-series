@@ -9,23 +9,19 @@ setwd("/home/lv999/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
 
 
 
-source("seqDatetime_byEnddate.R")   # 시작일(startDate)부터 종료일(endDate) 직전까지 날짜 벡터 구하기
-#seqDatetime_byEnddate(startDate="2000-01-01", endDate="2000-01-04", split=7)
-
-source("seqDatetime_byLength.R")    # 시작일(startDate)부터 길이(length)만큼 날짜 벡터 구하기
-# seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
+source("seqDatetime_byEnddate.R")   # 시작일(startDate)부터 종료일(endDate) 직전까지 날짜 벡터 구하기      #seqDatetime_byEnddate(startDate="2000-01-01", endDate="2000-01-04", split=7)
+source("seqDatetime_byLength.R")    # 시작일(startDate)부터 길이(length)만큼 날짜 벡터 구하기       # seqDatetime_byLength(startDate="2000-01-04", length=6, split=7)
 
 
-
-source("getUniqVec.R")  # datetime의 index를 구하는 함수
-# getUniqVec(datetimeVec, index="YYYYMMDDHHMMDD")
-source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 등을 구하는 함수
-# getCalcVec(dataVec, datetimeIndexVec, calc="last")
+source("getUniqVec.R")  # datetime의 index를 구하는 함수       # getUniqVec(datetimeVec, index="YYYYMMDDHHMMDD")
+source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 등을 구하는 함수       # getCalcVec(dataVec, datetimeIndexVec, calc="last")
 
 
 data = read.csv("./datasets/buildingA_15min.csv")
 dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
+
+
 
 
 # 1일 단위로 하려면 YYYYMMDD
@@ -41,17 +37,25 @@ temp = cbind(indexVec, res)
 
 
 
-timedate = as.numeric(paste(data[,3], formatC(data[,4], width=4, flag="0"), sep=""))
-year = substr(data[,3], 1, 4)
-newData = cbind(data, year)
+
+library(urca)
+lc.ct = ur.df(res, lags=3, type='trend')		# ADF Test: Trend
+# lc.ct = ur.df(res, lags=3, type='drift')		# ADF Test: Drift
+# lc.ct = ur.pp(res, type='Z-tau', model='trend', lags='long')		# PP Test: Trend
+# lc.ct = ur.pp(res, type='Z-tau', model='constant', lags='long')		# PP Test: constant
+# lc.ct = ur.ers(res, type="DF-GLS", model="trend", lag.max=4)	# ERS Test: DF-GLS: Trend
+# lc.ct = ur.ers(res, type="P-test", model="trend")		# ERS Test: P-Test
+# lc.ct = ur.sp(res, type="tau", pol.deg=2, signif=0.05)		# SP Test: tau
+# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# SP Test: rho
+# lc.ct = ur.sp(res, type="rho", pol.deg=2, signif=0.05)		# KPSS Test: rho
+
+testStat = lc.ct@testreg$fstatistic
+resPVal = 1 - pf(testStat[1], testStat[2], testStat[3])
 
 
 
 
-
-
-
-plotAll = function(main = "ADF Test")
+plotAll = function(dataVec, datetimeVec, main = "Main")
 {
 	# init
     par(mfrow = c(1, 1))
@@ -61,87 +65,22 @@ plotAll = function(main = "ADF Test")
 	axis(2, dataVec, labels=seq(0, max(dataVec), by=50), at=seq(0, max(dataVec), by=50))
 
 	# x축 axis  년도
-	min2015 = min(which(year == "2015"));
-	min2016 = min(which(year == "2016"))
-	min2017 = min(which(year == "2017"));
-	min2018 = min(which(year == "2018"))
-	axis(1, c(min2015, min2016, min2017, min2018), labels = c("2015", "2016", "2017", "2018"), line=1)
+    source("getIndexVec.R")  # dataVec의 unique 값이 위치하는 최소/최대 index를 출력한다.
+    year = getUniqVec(datetime, index="YYYY")
+    yearIndex = getIndexVec(year, func="min")
+	
+    axis(1, yearIndex, labels = unique(year), line=1)
 	mtext("Year",1,line=1,at=0.2)
 
 	# x축 axis: 월
-	season = newData[,13]
-	yearmonth = substr(data[,3], 1, 6)
-
-	month201509 = which(yearmonth=="201509");	
-	month201510 = which(yearmonth=="201510");	
-	month201511 = which(yearmonth=="201511");	
-	month201512 = which(yearmonth=="201512")
-	month201601 = which(yearmonth=="201601");	
-	month201602 = which(yearmonth=="201602");	
-	month201603 = which(yearmonth=="201603");	
-	month201604 = which(yearmonth=="201604")
-	month201605 = which(yearmonth=="201605");	
-	month201606 = which(yearmonth=="201606");	
-	month201607 = which(yearmonth=="201607");	
-	month201608 = which(yearmonth=="201608")
-	month201609 = which(yearmonth=="201609");	
-	month201610 = which(yearmonth=="201610");	
-	month201611 = which(yearmonth=="201611");	
-	month201612 = which(yearmonth=="201612")
-	month201701 = which(yearmonth=="201701");	
-	month201702 = which(yearmonth=="201702");	
-	month201703 = which(yearmonth=="201703");	
-	month201704 = which(yearmonth=="201704")
-	month201705 = which(yearmonth=="201705");	
-	month201706 = which(yearmonth=="201706");	
-	month201707 = which(yearmonth=="201707");	
-	month201708 = which(yearmonth=="201708")
-	month201709 = which(yearmonth=="201709");	
-	month201710 = which(yearmonth=="201710");	
-	month201711 = which(yearmonth=="201711");	
-	month201712 = which(yearmonth=="201712")
-	month201801 = which(yearmonth=="201801");	
-	month201802 = which(yearmonth=="201802")
-	
-	axis_vec = c(	min(month201509),
-						min(month201510),
-						min(month201511),
-						min(month201512),
-						min(month201601),
-						min(month201602),
-						min(month201603),
-						min(month201604),
-						min(month201605),
-						min(month201606),
-						min(month201607),
-						min(month201608),
-						min(month201609),
-						min(month201610),
-						min(month201611),
-						min(month201612),
-						min(month201701),
-						min(month201702),
-						min(month201703),
-						min(month201704),
-						min(month201705),
-						min(month201706),
-						min(month201707),
-						min(month201708),
-						min(month201709),
-						min(month201710),
-						min(month201711),
-						min(month201712),
-						min(month201801),
-						min(month201802))
+	yearmonth = getUniqVec(datetime, index="YYYYMM")	
+    yearmonthIndex = getIndexVec(yearmonth, func="min")
 	
 	monthVec = c("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
-	monthVec = c(monthVec[9:12], monthVec, monthVec, monthVec[1:2])
+	monthVec = substr(unique(yearmonth), 6, 8)
 	
-	axis(1, axis_vec, labels = monthVec, line=3)
+	axis(1, yearmonthIndex, labels = monthVec, line=3)
 	mtext("Month", 1, line=3, at=0.2)
-	
-	axis(1, data[,2], labels = data[,2], line=5, lwd.ticks=0.1)
-	mtext("Index", 1, line=5,at=0.2)
 }
 
 
