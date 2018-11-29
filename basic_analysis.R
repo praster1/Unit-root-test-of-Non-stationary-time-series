@@ -33,10 +33,10 @@ res = getCalcVec(dataVec, indexVec, calc="sum")
 temp = cbind(indexVec, res)
 
 
-partialLen = 96*30
-stepSize = 96
+partialLen = 96*20
+stepSize = 96*10
 
-lag = 1
+lag = 96/2
 signif = 0.001
 
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
