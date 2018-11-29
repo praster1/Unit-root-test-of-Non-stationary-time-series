@@ -20,17 +20,6 @@ resPVal = 1 - pf(testStat[1], testStat[2], testStat[3])
 
 
 
-### color Test
-df <- data.frame(Month=seq(1,12),
-                 Value = rnorm(12,0,1),
-                 Season = c('Winter', 'Winter', 'Spring',
-                            'Spring', 'Spring', 'Summer',
-                            'Summer', 'Summer', 'Fall',
-                            'Fall', 'Fall', 'Winter'))
-attach(df)
-plot(Value~Month, type="n")
-rect(df$Month-0.5, min(df$Value), df$Month+0.5, max(df$Value), col=df$Season, lty=0)
-lines(Value~Month, data=df, type='l', col="orange", lwd=2)
 
 
 

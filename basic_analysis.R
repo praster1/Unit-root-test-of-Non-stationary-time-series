@@ -33,8 +33,11 @@ res = getCalcVec(dataVec, indexVec, calc="sum")
 temp = cbind(indexVec, res)
 
 
-partialLen = 96*3
+partialLen = 96*30
 stepSize = 96
+
+lag = 1
+signif = 0.001
 
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
 sampleVec = getPartialData(dataVec, partialLength=partialLen, stepSize=stepSize)
@@ -43,25 +46,50 @@ sampleVec = getPartialData(dataVec, partialLength=partialLen, stepSize=stepSize)
 
 library(urca)
 
-# analysisRes = lapply(sampleVec$data, ur.df, lags=1, type='trend')                                         # ADF Test: Trend
-analysisRes = lapply(sampleVec$data, ur.df, selectlags='Fixed', type='trend')                                         # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, selectlags='AIC', type='trend')                                         # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, selectlags='BIC', type='trend')                                         # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, lags=1, type='drift')                                           # ADF Test: Drift
+analysisRes = lapply(sampleVec$data, ur.df, lags=lag, type='trend')                                        # ADF Test: Trend
+# analysisRes = lapply(sampleVec$data, ur.df, selectlags='Fixed', type='trend')                            # ADF Test: Trend
+# analysisRes = lapply(sampleVec$data, ur.df, selectlags='AIC', type='trend')                             # ADF Test: Trend
+# analysisRes = lapply(sampleVec$data, ur.df, selectlags='BIC', type='trend')                             # ADF Test: Trend
+# analysisRes = lapply(sampleVec$data, ur.df, lags=lag, type='drift')                                         # ADF Test: Drift
 # analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='trend', lags='long')             # PP Test: Trend
 # analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='constant', lags='long')        # PP Test: constant
-# analysisRes = lapply(sampleVec$data, ur.ers, type='DF-GLS', model='trend', lag.max=4)          # ERS Test: DF-GLS: Trend
+# analysisRes = lapply(sampleVec$data, ur.ers, type='DF-GLS', model='trend', lag.max=lag)        # ERS Test: DF-GLS: Trend
 # analysisRes = lapply(sampleVec$data, ur.ers, type='P-test', model='trend')                            # ERS Test: P-Test
-# analysisRes = lapply(sampleVec$data, ur.sp, type='tau', pol.deg=2, signif=0.05)                      # SP Test: tau
-# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=0.05)                               # SP Test: rho
-# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=0.05)                               # KPSS Test: rho
+# analysisRes = lapply(sampleVec$data, ur.sp, type='tau', pol.deg=2, signif=signif)                     # SP Test: tau
+# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=signif)                              # SP Test: rho
+# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=signif)                              # KPSS Test: rho
+
+
+### Cox-Stuart Trend Test
+source("cox_stuart_test.R")
+source("cox_stuart_test_inc.R")
+source("cox_stuart_test_des.R")
 
 
 
-par(mfrow = c(2, 1))
 
 source("plotAll.R")
+par(mfrow = c(3, 1))
 plotAll(dataVec, datetime)
+
+
+coxres = lapply(sampleVec$data, cox_stuart_test)
+for (i in 1:len)
+{
+    if (as.numeric(coxres[[i]]$statistic) < signif)
+    {
+        #points(cbind(sampleVec$index[[i]], i))
+        if (names(coxres[[i]]$statistic) == "Increasing trend, p-value")
+        {
+            rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightpink", lty=0)
+        }
+        else
+        {
+            rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightblue", lty=0)
+        }
+    }
+}
+
 
 len = length(sampleVec$data)
 for (i in 1:len)
@@ -73,36 +101,80 @@ for (i in 1:len)
     {
         points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
     }
+    else
+    {
+        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="black");	
+    }
 }
 
 
-hypoTest = NULL;
+
+
+plotAll(dataVec, datetime)
+coxIncres = lapply(sampleVec$data, cox_stuart_test_inc)
+for (i in 1:len)
+{
+    if (as.numeric(coxIncres[[i]]$statistic) < signif)
+    {
+        #points(cbind(sampleVec$index[[i]], i))
+        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightpink", lty=0)
+    }
+    else
+    {
+        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="white", lty=0)
+    }
+}
+
+
 len = length(sampleVec$data)
 for (i in 1:len)
 {
-    hypoTest = c(hypoTest, analysisRes[[i]]@teststat[1] < analysisRes[[i]]@cval[1,2])
+    testStat = analysisRes[[i]]@teststat[1]
+    cval = analysisRes[[i]]@cval[1,2]
+    print(paste("i:", i, "/", len, "     ", testStat < cval))
+    if (testStat < cval)
+    {
+        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
+    }
+    else
+    {
+        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="black");	
+    }
 }
 
 
-# Cox-Stuart Trend Test
-source("cox_stuart_test.R")
-source("cox_stuart_test_inc.R")
-source("cox_stuart_test_des.R")
 
 
+plotAll(dataVec, datetime)
+coxDesres = lapply(sampleVec$data, cox_stuart_test_des)
+for (i in 1:len)
+{
+    if (as.numeric(coxDesres[[i]]$statistic) < signif)
+    {
+        #points(cbind(sampleVec$index[[i]], i))
+        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightblue", lty=0)
+    }
+    else
+    {
+        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="white", lty=0)
+    }
+}
 
 
+len = length(sampleVec$data)
+for (i in 1:len)
+{
+    testStat = analysisRes[[i]]@teststat[1]
+    cval = analysisRes[[i]]@cval[1,2]
+    print(paste("i:", i, "/", len, "     ", testStat < cval))
+    if (testStat < cval)
+    {
+        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
+    }
+    else
+    {
+        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="black");	
+    }
+}
 
 
-
-vec  = dataVec[17473:26304] #20160301 ~ 20160531
-# customers = c(5, 9, 12, 18, 17, 16, 19, 20, 4, 3, 18, 16, 17, 15, 14)
-cox.stuart.test(vec)
-cox.stuart.test_inc(vec)
-cox.stuart.test_des(vec)
-
-
-vec  = dataVec[26305:35136] #20160601 ~ 20160831
-cox.stuart.test(vec)
-cox.stuart.test_inc(vec)
-cox.stuart.test_des(vec)
