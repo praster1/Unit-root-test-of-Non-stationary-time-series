@@ -21,7 +21,7 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 data = read.csv("./datasets/buildingA_15min.csv")
 dataVec = data[,5]
-datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)
+datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
 
 
 
@@ -33,8 +33,11 @@ res = getCalcVec(dataVec, indexVec, calc="sum")
 temp = cbind(indexVec, res)
 
 
+partialLen = 96*3
+stepSize = 96
+
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
-sampleVec = getPartialData(dataVec, partialLength=96*3, stepSize=96)
+sampleVec = getPartialData(dataVec, partialLength=partialLen, stepSize=stepSize)
 
 
 
@@ -54,7 +57,8 @@ analysisRes = lapply(sampleVec$data, ur.df, selectlags='Fixed', type='trend')   
 # analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=0.05)                               # KPSS Test: rho
 
 
-par(mfrow = c(3, 1))
+
+par(mfrow = c(2, 1))
 
 source("plotAll.R")
 plotAll(dataVec, datetime)
@@ -70,3 +74,35 @@ for (i in 1:len)
         points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
     }
 }
+
+
+hypoTest = NULL;
+len = length(sampleVec$data)
+for (i in 1:len)
+{
+    hypoTest = c(hypoTest, analysisRes[[i]]@teststat[1] < analysisRes[[i]]@cval[1,2])
+}
+
+
+# Cox-Stuart Trend Test
+source("cox_stuart_test.R")
+source("cox_stuart_test_inc.R")
+source("cox_stuart_test_des.R")
+
+
+
+
+
+
+
+vec  = dataVec[17473:26304] #20160301 ~ 20160531
+# customers = c(5, 9, 12, 18, 17, 16, 19, 20, 4, 3, 18, 16, 17, 15, 14)
+cox.stuart.test(vec)
+cox.stuart.test_inc(vec)
+cox.stuart.test_des(vec)
+
+
+vec  = dataVec[26305:35136] #20160601 ~ 20160831
+cox.stuart.test(vec)
+cox.stuart.test_inc(vec)
+cox.stuart.test_des(vec)
