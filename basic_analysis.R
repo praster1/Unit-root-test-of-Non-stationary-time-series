@@ -95,7 +95,7 @@ len = length(sampleVec$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
-    cval = analysisRes[[i]]@cval[1,2]
+    cval = analysisRes[[i]]@cval[1,1]
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
@@ -130,7 +130,7 @@ len = length(sampleVec$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
-    cval = analysisRes[[i]]@cval[1,2]
+    cval = analysisRes[[i]]@cval[1,1]
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
@@ -165,7 +165,7 @@ len = length(sampleVec$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
-    cval = analysisRes[[i]]@cval[1,2]
+    cval = analysisRes[[i]]@cval[1,1]
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
