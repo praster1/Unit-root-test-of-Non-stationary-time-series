@@ -28,34 +28,38 @@ datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), 
 
 # 1일 단위로 하려면 YYYYMMDD
 # 1시간 단위로 하려면 YYYYMMDDHH
+# 15분 단위로 하려면 YYYYMMDDHHMM
 indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")
 res = getCalcVec(dataVec, indexVec, calc="sum")
 temp = cbind(indexVec, res)
+dataVec = as.numeric(temp[,2])
 
 
 
-### Sample Vector 리스트 구하기
+##### Sample Vector 리스트 구하기
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
 
-# for Unit Root Test
-partialLen_UnitRoot = 96
-stepSize_UnitRoot = 96/2
+### for Trend Test
+partialLen_Trend = 96*20
+stepSize_Trend = 96*10
 
-lag_UnitRoot = 96/2
+signif_Trend = 0.001
+
+sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
+
+
+### for Unit Root Test
+partialLen_UnitRoot = 96
+stepSize_UnitRoot = 96/12
+
+lag_UnitRoot = 96/12
 signif_UnitRoot = 0.001
 
 
 sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, stepSize=stepSize_UnitRoot)
 
 
-### for Trend Test
-partialLen_Trend = 96*20
-stepSize_Trend = 96*10
 
-lag_Trend = 96/2
-signif_Trend = 0.001
-
-sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
 
 
 
@@ -97,6 +101,7 @@ plotAll(dataVec, datetime)
 
 
 ### Trend Test
+len = length(sampleVec_Trend$data)
 coxres = lapply(sampleVec_Trend$data, cox_stuart_test)
 for (i in 1:len)
 {
@@ -136,8 +141,10 @@ for (i in 1:len)
 
 
 
-### Trend Test
 plotAll(dataVec, datetime)
+
+### Trend Test
+len = length(sampleVec_Trend$data)
 coxIncres = lapply(sampleVec_Trend$data, cox_stuart_test_inc)
 for (i in 1:len)
 {
@@ -174,8 +181,10 @@ for (i in 1:len)
 
 
 
-### Trend Test
 plotAll(dataVec, datetime)
+
+### Trend Test
+len = length(sampleVec_Trend$data)
 coxDesres = lapply(sampleVec_Trend$data, cox_stuart_test_des)
 for (i in 1:len)
 {
