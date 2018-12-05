@@ -55,14 +55,14 @@ stepSize_Trend = 96*10
 lag_Trend = 96/2
 signif_Trend = 0.001
 
-sampleVec_Trend = getPartialData(sampleVec_UnitRoot, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
+sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
 
 
 
 
 library(urca)
 
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag, type='trend')                                        # ADF Test: Trend
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag_UnitRoot, type='trend')                                        # ADF Test: Trend
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, selectlags='Fixed', type='trend')                            # ADF Test: Trend
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, selectlags='AIC', type='trend')                             # ADF Test: Trend
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, selectlags='BIC', type='trend')                             # ADF Test: Trend
@@ -71,9 +71,9 @@ analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag, type='trend')    
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', lags='long')        # PP Test: constant
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=lag)        # ERS Test: DF-GLS: Trend
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend')                            # ERS Test: P-Test
-# analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=2, signif=signif)                     # SP Test: tau
-# analysisRes = lapply(sampleVec_UnitRoot$data, type='rho', pol.deg=2, signif=signif)                              # SP Test: rho
-# analysisRes = lapply(sampleVec_UnitRoot$data, type='rho', pol.deg=2, signif=signif)                              # KPSS Test: rho
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=2, signif=signif_UnitRoot)                     # SP Test: tau
+# analysisRes = lapply(sampleVec_UnitRoot$data, type='rho', pol.deg=2, signif=signif_UnitRoot)                              # SP Test: rho
+# analysisRes = lapply(sampleVec_UnitRoot$data, type='rho', pol.deg=2, signif=signif_UnitRoot)                              # KPSS Test: rho
 
 
 
@@ -100,7 +100,7 @@ plotAll(dataVec, datetime)
 coxres = lapply(sampleVec_Trend$data, cox_stuart_test)
 for (i in 1:len)
 {
-    if (as.numeric(coxres[[i]]$statistic) < signif)
+    if (as.numeric(coxres[[i]]$statistic) < signif_Trend)
     {
         #points(cbind(sampleVec$index[[i]], i))
         if (names(coxres[[i]]$statistic) == "Increasing trend, p-value")
@@ -141,7 +141,7 @@ plotAll(dataVec, datetime)
 coxIncres = lapply(sampleVec_Trend$data, cox_stuart_test_inc)
 for (i in 1:len)
 {
-    if (as.numeric(coxIncres[[i]]$statistic) < signif)
+    if (as.numeric(coxIncres[[i]]$statistic) < signif_Trend)
     {
         #points(cbind(sampleVec$index[[i]], i))
         rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="lightpink", lty=0)
@@ -179,7 +179,7 @@ plotAll(dataVec, datetime)
 coxDesres = lapply(sampleVec_Trend$data, cox_stuart_test_des)
 for (i in 1:len)
 {
-    if (as.numeric(coxDesres[[i]]$statistic) < signif)
+    if (as.numeric(coxDesres[[i]]$statistic) < signif_Trend)
     {
         #points(cbind(sampleVec$index[[i]], i))
         rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="lightblue", lty=0)
