@@ -38,43 +38,42 @@ temp = cbind(indexVec, res)
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
 
 # for Unit Root Test
-partialLen = 96*20
-stepSize = 96*10
+partialLen_UnitRoot = 96
+stepSize_UnitRoot = 96/2
 
-lag = 96/2
-signif = 0.001
+lag_UnitRoot = 96/2
+signif_UnitRoot = 0.001
 
 
-sampleVec = getPartialData(dataVec, partialLength=partialLen, stepSize=stepSize)
+sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, stepSize=stepSize_UnitRoot)
 
 
 ### for Trend Test
-partialLen = 96*20
-stepSize = 96*10
+partialLen_Trend = 96*20
+stepSize_Trend = 96*10
 
-lag = 96/2
-signif = 0.001
+lag_Trend = 96/2
+signif_Trend = 0.001
 
-source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
-sampleVec = getPartialData(dataVec, partialLength=partialLen, stepSize=stepSize)
+sampleVec_Trend = getPartialData(sampleVec_UnitRoot, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
 
 
 
 
 library(urca)
 
-analysisRes = lapply(sampleVec$data, ur.df, lags=lag, type='trend')                                        # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, selectlags='Fixed', type='trend')                            # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, selectlags='AIC', type='trend')                             # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, selectlags='BIC', type='trend')                             # ADF Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.df, lags=lag, type='drift')                                         # ADF Test: Drift
-# analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='trend', lags='long')             # PP Test: Trend
-# analysisRes = lapply(sampleVec$data, ur.pp, type='Z-tau', model='constant', lags='long')        # PP Test: constant
-# analysisRes = lapply(sampleVec$data, ur.ers, type='DF-GLS', model='trend', lag.max=lag)        # ERS Test: DF-GLS: Trend
-# analysisRes = lapply(sampleVec$data, ur.ers, type='P-test', model='trend')                            # ERS Test: P-Test
-# analysisRes = lapply(sampleVec$data, ur.sp, type='tau', pol.deg=2, signif=signif)                     # SP Test: tau
-# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=signif)                              # SP Test: rho
-# analysisRes = lapply(sampleVec$data, type='rho', pol.deg=2, signif=signif)                              # KPSS Test: rho
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag, type='trend')                                        # ADF Test: Trend
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, selectlags='Fixed', type='trend')                            # ADF Test: Trend
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, selectlags='AIC', type='trend')                             # ADF Test: Trend
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, selectlags='BIC', type='trend')                             # ADF Test: Trend
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag, type='drift')                                         # ADF Test: Drift
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', lags='long')             # PP Test: Trend
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', lags='long')        # PP Test: constant
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=lag)        # ERS Test: DF-GLS: Trend
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend')                            # ERS Test: P-Test
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=2, signif=signif)                     # SP Test: tau
+# analysisRes = lapply(sampleVec_UnitRoot$data, type='rho', pol.deg=2, signif=signif)                              # SP Test: rho
+# analysisRes = lapply(sampleVec_UnitRoot$data, type='rho', pol.deg=2, signif=signif)                              # KPSS Test: rho
 
 
 
@@ -98,7 +97,7 @@ plotAll(dataVec, datetime)
 
 
 ### Trend Test
-coxres = lapply(sampleVec$data, cox_stuart_test)
+coxres = lapply(sampleVec_Trend$data, cox_stuart_test)
 for (i in 1:len)
 {
     if (as.numeric(coxres[[i]]$statistic) < signif)
@@ -106,18 +105,18 @@ for (i in 1:len)
         #points(cbind(sampleVec$index[[i]], i))
         if (names(coxres[[i]]$statistic) == "Increasing trend, p-value")
         {
-            rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightpink", lty=0)
+            rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="lightpink", lty=0)
         }
         else
         {
-            rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightblue", lty=0)
+            rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="lightblue", lty=0)
         }
     }
 }
 
 
 ### Unit Root Test
-len = length(sampleVec$data)
+len = length(sampleVec_UnitRoot$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
@@ -125,11 +124,11 @@ for (i in 1:len)
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
-        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red");	
     }
     else
     {
-        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="black");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="black");	
     }
 }
 
@@ -139,23 +138,23 @@ for (i in 1:len)
 
 ### Trend Test
 plotAll(dataVec, datetime)
-coxIncres = lapply(sampleVec$data, cox_stuart_test_inc)
+coxIncres = lapply(sampleVec_Trend$data, cox_stuart_test_inc)
 for (i in 1:len)
 {
     if (as.numeric(coxIncres[[i]]$statistic) < signif)
     {
         #points(cbind(sampleVec$index[[i]], i))
-        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightpink", lty=0)
+        rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="lightpink", lty=0)
     }
     else
     {
-        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="white", lty=0)
+        rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="white", lty=0)
     }
 }
 
 
 ### Unit Root Test
-len = length(sampleVec$data)
+len = length(sampleVec_UnitRoot$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
@@ -163,11 +162,11 @@ for (i in 1:len)
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
-        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red");	
     }
     else
     {
-        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="black");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="black");	
     }
 }
 
@@ -177,23 +176,23 @@ for (i in 1:len)
 
 ### Trend Test
 plotAll(dataVec, datetime)
-coxDesres = lapply(sampleVec$data, cox_stuart_test_des)
+coxDesres = lapply(sampleVec_Trend$data, cox_stuart_test_des)
 for (i in 1:len)
 {
     if (as.numeric(coxDesres[[i]]$statistic) < signif)
     {
         #points(cbind(sampleVec$index[[i]], i))
-        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="lightblue", lty=0)
+        rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="lightblue", lty=0)
     }
     else
     {
-        rect(min(sampleVec$index[[i]]), min(dataVec), max(sampleVec$index[[i]]), max(dataVec), col="white", lty=0)
+        rect(min(sampleVec_Trend$index[[i]]), min(dataVec), max(sampleVec_Trend$index[[i]]), max(dataVec), col="white", lty=0)
     }
 }
 
 
 ### Unit Root Test
-len = length(sampleVec$data)
+len = length(sampleVec_UnitRoot$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
@@ -201,11 +200,11 @@ for (i in 1:len)
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
-        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="red");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red");	
     }
     else
     {
-        points(sampleVec$index[[i]], sampleVec$data[[i]], type="l", col="black");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="black");	
     }
 }
 
