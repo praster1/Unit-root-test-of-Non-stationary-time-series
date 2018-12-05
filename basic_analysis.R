@@ -73,6 +73,7 @@ par(mfrow = c(3, 1))
 plotAll(dataVec, datetime)
 
 
+### Trend Test
 coxres = lapply(sampleVec$data, cox_stuart_test)
 for (i in 1:len)
 {
@@ -91,6 +92,7 @@ for (i in 1:len)
 }
 
 
+### Unit Root Test
 len = length(sampleVec$data)
 for (i in 1:len)
 {
@@ -110,6 +112,8 @@ for (i in 1:len)
 
 
 
+
+### Trend Test
 plotAll(dataVec, datetime)
 coxIncres = lapply(sampleVec$data, cox_stuart_test_inc)
 for (i in 1:len)
@@ -126,6 +130,7 @@ for (i in 1:len)
 }
 
 
+### Unit Root Test
 len = length(sampleVec$data)
 for (i in 1:len)
 {
@@ -145,6 +150,8 @@ for (i in 1:len)
 
 
 
+
+### Trend Test
 plotAll(dataVec, datetime)
 coxDesres = lapply(sampleVec$data, cox_stuart_test_des)
 for (i in 1:len)
@@ -161,6 +168,7 @@ for (i in 1:len)
 }
 
 
+### Unit Root Test
 len = length(sampleVec$data)
 for (i in 1:len)
 {
