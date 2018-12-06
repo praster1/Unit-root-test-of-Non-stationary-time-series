@@ -36,12 +36,20 @@ dataVec = as.numeric(temp[,2])
 
 
 
+
+library(rdatamarket)
+library(Quandl)
+ausgdp <- as.ts(dmseries("http://data.is/1jDQwpr")[,1])
+ausgdp2 <- ts(rev(Quandl("FRED/AUSRGDPC", type="ts")), end=2011)
+
+
+
 ##### Sample Vector 리스트 구하기
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
 
 ### for Trend Test
-partialLen_Trend = 96*20
-stepSize_Trend = 96*10
+partialLen_Trend = 96*14
+stepSize_Trend = 96
 
 signif_Trend = 0.001
 
@@ -49,10 +57,10 @@ sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSi
 
 
 ### for Unit Root Test
-partialLen_UnitRoot = 96
-stepSize_UnitRoot = 96/12
+partialLen_UnitRoot = 96*3.5
+stepSize_UnitRoot = 96
 
-lag_UnitRoot = 96/12
+lag_UnitRoot = 96
 signif_UnitRoot = 0.001
 
 
@@ -96,7 +104,13 @@ source("cox_stuart_test_des.R")
 
 
 source("plotAll.R")
-par(mfrow = c(3, 1))
+par(mfrow = c(4, 1))
+plotAll(dataVec, datetime)
+
+
+
+
+
 plotAll(dataVec, datetime)
 
 
@@ -125,7 +139,7 @@ len = length(sampleVec_UnitRoot$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
-    cval = analysisRes[[i]]@cval[1,1]
+    cval = analysisRes[[i]]@cval[1,3]
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
@@ -165,7 +179,7 @@ len = length(sampleVec_UnitRoot$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
-    cval = analysisRes[[i]]@cval[1,1]
+    cval = analysisRes[[i]]@cval[1,3]
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
@@ -205,7 +219,7 @@ len = length(sampleVec_UnitRoot$data)
 for (i in 1:len)
 {
     testStat = analysisRes[[i]]@teststat[1]
-    cval = analysisRes[[i]]@cval[1,1]
+    cval = analysisRes[[i]]@cval[1,3]
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
