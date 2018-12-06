@@ -37,11 +37,6 @@ dataVec = as.numeric(temp[,2])
 
 
 
-library(rdatamarket)
-library(Quandl)
-ausgdp <- as.ts(dmseries("http://data.is/1jDQwpr")[,1])
-ausgdp2 <- ts(rev(Quandl("FRED/AUSRGDPC", type="ts")), end=2011)
-
 
 
 ##### Sample Vector 리스트 구하기
