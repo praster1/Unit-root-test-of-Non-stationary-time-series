@@ -17,101 +17,43 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 
 
+
+
 ##### Simulation of a random time series
 source("synthetic_pureRP.R")
-
 X_t = synthetic_pureRP(constMean = 2, mean = 0, sd = 1, length = 100)
 # ts.plot(X_t, main = "Example of (random) stationary time series", ylab = expression(X[t]))
 
 
 
-
 ##### Random Walk process simulation
-
-synthetic_randomWalk = function(initVal = 0, mean = 0, sd = 1, length = 100)
-{
-    # seed X_0 = 0
-    X <- 0
-
-    # purely random process with mean 0 and standard deviation 1.5
-    Z <- rnorm(100, mean = 0.5, sd = 1.5)
-
-    # the process
-    for (i in 2:length(Z))
-    {
-        X[i] <- X[i-1] + Z[i]
-    }
-
-}
-
-# process plotting
-ts.plot(X, main = "Random walk process")
-
+source("synthetic_randomWalk.R")
+X_t = synthetic_randomWalk(initVal = 0, mean = 0, sd = 1, length = 100)
+# ts.plot(X_t, main = "Random walk process")
 
 
 
 ##### Moving Average of order q: MA(q)
-### Simulation of a first order MA(1)
-
-# purely random process with mean 0 and standard deviation 1.5 (arbitrary choice)
-Z <- rnorm(100, mean = 0, sd = 1.5)
-
-# process simulation
-X <- c()
-for (i in 2:length(Z)) 
-{
-  X[i] <- Z[i] - 0.45*Z[i-1]
-}
-
-# process plotting
-ts.plot(X, main = "Moving Average or order 1 process")
+source("synthetic_MA1.R")
+X_t = synthetic_MA1(coef=-0.45, mean = 0, sd = 1, length = 100)
+ts.plot(X_t, main = "Moving Average or order 1 process")
 
 
 
 
 ##### Auto-Regression of order p: AR(p)
-### Simulating an AR(1)
-
-# constant alpha
-alpha = 0.5
-
-# purely random process with mean 0 and standard deviation 1.5
-Z <- rnorm(100, mean = 0, sd = 1.5)
-
-# seed
-X <- rnorm(1)
-
-# the process
-for (i in 2:length(Z)) {
-  X[i] <- 0.7*X[i-1]+Z[i]
-}
-
-# process plotting
-ts.plot(X)
+source("synthetic_AR1.R")
+X_t = synthetic_AR1(initVal = 0, coef=-0.45, mean = 0, sd = 1, length = 100)
+ts.plot(X_t)
 
 
 
 
 ##### Autoregressive moving average process: ARMA(p,q)
-### ARMA(1,1) process simulation
-
-# purely random process with mean 0 and standard deviation 1.5
-Z <- rnorm(100, mean = 0, sd = 1.5)
-
-# Process
-X <- rnorm(1)
-
-for (i in 2:length(Z)) 
-{
-    X[i] <- 0.35*X[i-1] + Z[i] + 0.4*Z[i-1]
-}
-
-# process plotting
+source("synthetic_ARMA11.R")
+X_t = synthetic_ARMA11(initVal = 0, coefAR=-0.45, coefMA=-0.45, mean = 0, sd = 1, length = 100)
 ts.plot(X, main = "ARMA(1,1) process")
 
-# ACF et PACF
-par(mfrow = c(1,2))
-acf(X); pacf(X)
 
 
 
