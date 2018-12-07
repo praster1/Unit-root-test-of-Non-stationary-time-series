@@ -1,5 +1,8 @@
 rm(list = ls())
 
+# Building A : 녹지캠
+# Building B : 인문대
+# Building C : 하나과학관
 
 
 setwd("/home/lv999/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
@@ -16,115 +19,11 @@ source("getUniqVec.R")  # datetime의 index를 구하는 함수       # getUniqV
 source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 등을 구하는 함수       # getCalcVec(dataVec, datetimeIndexVec, calc="last")
 
 
-
-##### Simulation of a random time series
-source("synthetic_pureRP.R")
-
-X_t = synthetic_pureRP(constMean = 2, mean = 0, sd = 1, length = 100)
-# ts.plot(X_t, main = "Example of (random) stationary time series", ylab = expression(X[t]))
-
-
-
-
-##### Random Walk process simulation
-
-synthetic_randomWalk = function(initVal = 0, mean = 0, sd = 1, length = 100)
-{
-    # seed X_0 = 0
-    X <- 0
-
-    # purely random process with mean 0 and standard deviation 1.5
-    Z <- rnorm(100, mean = 0.5, sd = 1.5)
-
-    # the process
-    for (i in 2:length(Z))
-    {
-        X[i] <- X[i-1] + Z[i]
-    }
-
-}
-
-# process plotting
-ts.plot(X, main = "Random walk process")
-
-
-
-
-##### Moving Average of order q: MA(q)
-### Simulation of a first order MA(1)
-
-# purely random process with mean 0 and standard deviation 1.5 (arbitrary choice)
-Z <- rnorm(100, mean = 0, sd = 1.5)
-
-# process simulation
-X <- c()
-for (i in 2:length(Z)) 
-{
-  X[i] <- Z[i] - 0.45*Z[i-1]
-}
-
-# process plotting
-ts.plot(X, main = "Moving Average or order 1 process")
-
-
-
-
-##### Auto-Regression of order p: AR(p)
-### Simulating an AR(1)
-
-# constant alpha
-alpha = 0.5
-
-# purely random process with mean 0 and standard deviation 1.5
-Z <- rnorm(100, mean = 0, sd = 1.5)
-
-# seed
-X <- rnorm(1)
-
-# the process
-for (i in 2:length(Z)) {
-  X[i] <- 0.7*X[i-1]+Z[i]
-}
-
-# process plotting
-ts.plot(X)
-
-
-
-
-##### Autoregressive moving average process: ARMA(p,q)
-### ARMA(1,1) process simulation
-
-# purely random process with mean 0 and standard deviation 1.5
-Z <- rnorm(100, mean = 0, sd = 1.5)
-
-# Process
-X <- rnorm(1)
-
-for (i in 2:length(Z)) 
-{
-    X[i] <- 0.35*X[i-1] + Z[i] + 0.4*Z[i-1]
-}
-
-# process plotting
-ts.plot(X, main = "ARMA(1,1) process")
-
-# ACF et PACF
-par(mfrow = c(1,2))
-acf(X); pacf(X)
-
-
-
-
-
-##### 전력데이터
-# Building A : 녹지캠
-# Building B : 인문대
-# Building C : 하나과학관
-
 data = read.csv("./datasets/buildingA_15min.csv")
 dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
+
+
 
 
 # 1일 단위로 하려면 YYYYMMDD
@@ -134,6 +33,8 @@ indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")
 res = getCalcVec(dataVec, indexVec, calc="sum")
 temp = cbind(indexVec, res)
 dataVec = as.numeric(temp[,2])
+
+
 
 
 

@@ -1,3 +1,5 @@
+# https://www.datacamp.com/community/tutorials/time-series-r?fbclid=IwAR1gplAQTs_e0WhRo4Ru4YozWyd4TqH-7tKr6F5gY5OUMkOyi6diXMKq-F4
+
 ##### Simulation of a random time series
 # purely random process with mean 0 and standard deviation 1.5
 eps <- rnorm(100, mean = 0, sd = 1)
@@ -45,7 +47,8 @@ Z <- rnorm(100, mean = 0, sd = 1.5)
 
 # process simulation
 X <- c()
-for (i in 2:length(Z)) {
+for (i in 2:length(Z)) 
+{
   X[i] <- Z[i] - 0.45*Z[i-1]
 }
 
