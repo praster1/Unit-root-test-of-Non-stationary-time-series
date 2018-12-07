@@ -19,63 +19,54 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 
 
-##### Simulation of a random time series
-source("synthetic_pureRP.R")
-X_t = synthetic_pureRP(constMean = 2, mean = 0, sd = 1, length = 100)
-# ts.plot(X_t, main = "Example of (random) stationary time series", ylab = expression(X[t]))
+dataLen = 100000
 
+
+##### Simulation of a random time series
+# source("synthetic_pureRP.R")
+# dataVec = synthetic_pureRP(constMean = 2, mean = 0, sd = 1, length = dataLen)
+# ts.plot(dataVec, main = "Example of (random) stationary time series", ylab = expression(X[t]))
 
 
 ##### Random Walk process simulation
 source("synthetic_randomWalk.R")
-X_t = synthetic_randomWalk(initVal = 0, mean = 0, sd = 1, length = 100)
-# ts.plot(X_t, main = "Random walk process")
-
+dataVec = synthetic_randomWalk(initVal = 0, mean = 0, sd = 1, length = dataLen)
+# ts.plot(dataVec, main = "Random walk process")
 
 
 ##### Moving Average of order q: MA(q)
-source("synthetic_MA1.R")
-X_t = synthetic_MA1(coef=-0.45, mean = 0, sd = 1, length = 100)
-ts.plot(X_t, main = "Moving Average or order 1 process")
-
-
+# source("synthetic_MA1.R")
+# dataVec = synthetic_MA1(coef=-0.45, mean = 0, sd = 1, length = dataLen)
+# ts.plot(dataVec, main = "Moving Average or order 1 process")
 
 
 ##### Auto-Regression of order p: AR(p)
-source("synthetic_AR1.R")
-X_t = synthetic_AR1(initVal = 0, coef=-0.45, mean = 0, sd = 1, length = 100)
-ts.plot(X_t)
-
-
+# source("synthetic_AR1.R")
+# dataVec = synthetic_AR1(initVal = 0, coef=-0.45, mean = 0, sd = 1, length = dataLen)
+# ts.plot(dataVec)
 
 
 ##### Autoregressive moving average process: ARMA(p,q)
-source("synthetic_ARMA11.R")
-X_t = synthetic_ARMA11(initVal = 0, coefAR=-0.45, coefMA=-0.45, mean = 0, sd = 1, length = 100)
-ts.plot(X, main = "ARMA(1,1) process")
-
-
-
-
+# source("synthetic_ARMA11.R")
+# dataVec = synthetic_ARMA11(initVal = 0, coefAR=-0.45, coefMA=-0.45, mean = 0, sd = 1, length = dataLen)
+# ts.plot(X, main = "ARMA(1,1) process")
 
 
 ##### 전력데이터
 # Building A : 녹지캠
-# Building B : 인문대
+# Building B : 인문대          # 86641번째 index가 NA
 # Building C : 하나과학관
 
-data = read.csv("./datasets/buildingA_15min.csv")
-dataVec = data[,5]
+# data = read.csv("./datasets/buildingA_15min.csv")
+# dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
 
+# indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
+# res = getCalcVec(dataVec, indexVec, calc="sum")
+# temp = cbind(indexVec, res)
+# dataVec = as.numeric(temp[,2])
 
-# 1일 단위로 하려면 YYYYMMDD
-# 1시간 단위로 하려면 YYYYMMDDHH
-# 15분 단위로 하려면 YYYYMMDDHHMM
-indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")
-res = getCalcVec(dataVec, indexVec, calc="sum")
-temp = cbind(indexVec, res)
-dataVec = as.numeric(temp[,2])
+
 
 
 
@@ -178,7 +169,7 @@ for (i in 1:len)
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
-        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red", lwd=5);	
     }
     else
     {
@@ -218,7 +209,7 @@ for (i in 1:len)
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
-        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red", lwd=5);	
     }
     else
     {
@@ -258,7 +249,7 @@ for (i in 1:len)
     print(paste("i:", i, "/", len, "     ", testStat < cval))
     if (testStat < cval)
     {
-        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red");	
+        points(sampleVec_UnitRoot$index[[i]], sampleVec_UnitRoot$data[[i]], type="l", col="red", lwd=5);	
     }
     else
     {
