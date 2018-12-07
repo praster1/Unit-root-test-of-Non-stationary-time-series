@@ -19,7 +19,7 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 
 
-dataLen = 100000
+dataLen = 96*1000
 
 
 ##### Simulation of a random time series
@@ -74,7 +74,7 @@ datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), 
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
 
 ### for Trend Test
-partialLen_Trend = 96*14
+partialLen_Trend = 96*7
 stepSize_Trend = 96
 
 signif_Trend = 0.001
@@ -83,7 +83,7 @@ sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSi
 
 
 ### for Unit Root Test
-partialLen_UnitRoot = 96*3.5
+partialLen_UnitRoot = 96*7
 stepSize_UnitRoot = 96
 
 lag_UnitRoot = 96
