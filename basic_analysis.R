@@ -19,7 +19,7 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 
 
-dataLen = 96*500
+dataLen = 96*365*3
 
 
 ##### Simulation of a random time series
@@ -29,9 +29,9 @@ dataLen = 96*500
 
 
 ##### Random Walk process simulation
-# source("synthetic_randomWalk.R")
-# dataVec = synthetic_randomWalk(initVal = 0, mean = 0, sd = 1, length = dataLen)
-# ts.plot(dataVec, main = "Random walk process")
+source("synthetic_randomWalk.R")
+dataVec = synthetic_randomWalk(initVal = 1000, mean = 0, sd = 1, length = dataLen)
+ts.plot(dataVec, main = "Random walk process")
 
 
 ##### Moving Average of order q: MA(q)      # Not Completed
@@ -41,14 +41,14 @@ dataLen = 96*500
 
 
 ##### Auto-Regression of order p: AR(p)
-source("synthetic_AR1.R")
-dataVec = synthetic_AR1(initVal = 0, coef=-0.45, mean = 0, sd = 1, length = dataLen)
+# source("synthetic_AR1.R")
+# dataVec = synthetic_AR1(initVal = 1000, coef=-0.45, mean = 0, sd = 1, length = dataLen)
 # ts.plot(dataVec)
 
 
 ##### Autoregressive moving average process: ARMA(p,q)
 # source("synthetic_ARMA11.R")
-# dataVec = synthetic_ARMA11(initVal = 0, coefAR=-0.45, coefMA=-0.45, mean = 0, sd = 1, length = dataLen)
+# dataVec = synthetic_ARMA11(initVal = 1000, coefAR=-0.45, coefMA=-0.45, mean = 0, sd = 1, length = dataLen)
 # ts.plot(X, main = "ARMA(1,1) process")
 
 
@@ -57,14 +57,14 @@ dataVec = synthetic_AR1(initVal = 0, coef=-0.45, mean = 0, sd = 1, length = data
 # Building B : 인문대          # 86641번째 index가 NA
 # Building C : 하나과학관
 
-# data = read.csv("./datasets/buildingA_15min.csv")
-# dataVec = data[,5]
+data = read.csv("./datasets/buildingA_15min.csv")
+dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
 
-# indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
-# res = getCalcVec(dataVec, indexVec, calc="sum")
-# temp = cbind(indexVec, res)
-# dataVec = as.numeric(temp[,2])
+indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
+res = getCalcVec(dataVec, indexVec, calc="sum")
+temp = cbind(indexVec, res)
+dataVec = as.numeric(temp[,2])
 
 
 
@@ -140,8 +140,13 @@ source("cox_stuart_test_des.R")
 
 
 source("plotAll.R")
-par(mfrow = c(4, 1))
+par(mfrow = c(6, 1))
 plotAll(dataVec, datetime)
+
+
+plot(decompose(ts(dataVec, frequency = 96*365))$trend, main="trend")
+
+plot(decompose(ts(dataVec, frequency = 96*365))$seasonal, main="sensonal")
 
 
 
