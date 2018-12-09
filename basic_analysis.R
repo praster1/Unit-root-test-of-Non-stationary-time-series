@@ -29,20 +29,20 @@ dataLen = 96*500
 
 
 ##### Random Walk process simulation
-source("synthetic_randomWalk.R")
-dataVec = synthetic_randomWalk(initVal = 0, mean = 0, sd = 1, length = dataLen)
+# source("synthetic_randomWalk.R")
+# dataVec = synthetic_randomWalk(initVal = 0, mean = 0, sd = 1, length = dataLen)
 # ts.plot(dataVec, main = "Random walk process")
 
 
-##### Moving Average of order q: MA(q)
+##### Moving Average of order q: MA(q)      # Not Completed
 # source("synthetic_MA1.R")
 # dataVec = synthetic_MA1(coef=-0.45, mean = 0, sd = 1, length = dataLen)
 # ts.plot(dataVec, main = "Moving Average or order 1 process")
 
 
 ##### Auto-Regression of order p: AR(p)
-# source("synthetic_AR1.R")
-# dataVec = synthetic_AR1(initVal = 0, coef=-0.45, mean = 0, sd = 1, length = dataLen)
+source("synthetic_AR1.R")
+dataVec = synthetic_AR1(initVal = 0, coef=-0.45, mean = 0, sd = 1, length = dataLen)
 # ts.plot(dataVec)
 
 
@@ -66,6 +66,17 @@ datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), 
 # temp = cbind(indexVec, res)
 # dataVec = as.numeric(temp[,2])
 
+
+
+##### 주가지수 데이터      # Not Completed
+# library(quantmod)
+# library(Quandl)
+
+# today <- Sys.Date()
+# ski_xts <- getSymbols(Symbols="096770.KS", 
+                      # src = "yahoo", 
+                      # from= "2013-01-01", 
+                      # to = today, auto.assign = FALSE)
 
 
 
