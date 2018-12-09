@@ -57,14 +57,14 @@ ts.plot(dataVec, main = "Random walk process")
 # Building B : 인문대          # 86641번째 index가 NA
 # Building C : 하나과학관
 
-data = read.csv("./datasets/buildingA_15min.csv")
-dataVec = data[,5]
+# data = read.csv("./datasets/buildingA_15min.csv")
+# dataVec = data[,5]
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
 
-indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
-res = getCalcVec(dataVec, indexVec, calc="sum")
-temp = cbind(indexVec, res)
-dataVec = as.numeric(temp[,2])
+# indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
+# res = getCalcVec(dataVec, indexVec, calc="sum")
+# temp = cbind(indexVec, res)
+# dataVec = as.numeric(temp[,2])
 
 
 
