@@ -24,14 +24,14 @@ dataLen = 96*365*3
 
 ##### Simulation of a random time series
 # source("synthetic_pureRP.R")
-# dataVec = synthetic_pureRP(constMean = 2, mean = 0, sd = 1, length = dataLen)
+# dataVec = synthetic_pureRP(constMean = 1000, mean = 0, sd = 1, length = dataLen)
 # ts.plot(dataVec, main = "Example of (random) stationary time series", ylab = expression(X[t]))
 
 
 ##### Random Walk process simulation
-source("synthetic_randomWalk.R")
-dataVec = synthetic_randomWalk(initVal = 1000, mean = 0, sd = 1, length = dataLen)
-ts.plot(dataVec, main = "Random walk process")
+# source("synthetic_randomWalk.R")
+# dataVec = synthetic_randomWalk(initVal = 1000, mean = 1.5, sd = 1, length = dataLen)
+# ts.plot(dataVec, main = "Random walk process")
 
 
 ##### Moving Average of order q: MA(q)
@@ -42,7 +42,7 @@ ts.plot(dataVec, main = "Random walk process")
 
 ##### Auto-Regressive of order p: AR(p)
 # source("synthetic_AR1.R")
-# dataVec = synthetic_AR1(initVal = 1000, coef=-0.45, mean = 0, sd = 1, length = dataLen)
+# dataVec = synthetic_AR1(initVal = 1, coef=-0.3, mean = 0, sd = 1.5, length = dataLen)
 # ts.plot(dataVec)
 
 
