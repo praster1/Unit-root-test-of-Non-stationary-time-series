@@ -22,18 +22,72 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 dataLen = 96*365*3      # 105120
 
 
-rgeom(5, prob=0.005)
+
+
+
 
 ##### Simulation of a random time series
+par(mfrow = c(6, 1))
+
 source("synthetic_pureRP.R")
-dataVec = synthetic_pureRP(constMean = 1000, mean = 0, sd = 1, length = dataLen)
+dataVec = synthetic_pureRP(constMean = 0, mean = 0, sd = 1, length = dataLen)
 ts.plot(dataVec, main = "Example of (random) stationary time series", ylab = expression(X[t]))
+
+outlierIndexs = sort(ceiling(runif(5, 1,dataLen)))
+
+outlierIndexs_IO = outlierIndexs[1]
+dataVec[outlierIndexs_IO:dataLen] = synthetic_pureRP(constMean = 0, mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
+ts.plot(dataVec, main = "Example of (random) stationary time series with IO", ylab = expression(X[t]))
+
+outlierIndexs_LSO = outlierIndexs[2]
+dataVec[outlierIndexs_LSO:dataLen] = synthetic_pureRP(constMean = 0, mean = runif(1, -3, 3), sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
+ts.plot(dataVec, main = "Example of (random) stationary time series with LSO", ylab = expression(X[t]))
+
+outlierIndexs_TCO = outlierIndexs[3:4]
+dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
+ts.plot(dataVec, main = "Example of (random) stationary time series with TCO", ylab = expression(X[t]))
+
+outlierIndexs_VC = outlierIndexs[5]
+addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
+dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
+ts.plot(dataVec, main = "Example of (random) stationary time series with VC", ylab = expression(X[t]))
+
+outlierIndexs_AO = runif(10, 1, dataLen)
+dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 10 * runif(10, -5, 5)
+ts.plot(dataVec, main = "Example of (random) stationary time series with AO", ylab = expression(X[t]))
+
 
 
 ##### Random Walk process simulation
-# source("synthetic_randomWalk.R")
-# dataVec = synthetic_randomWalk(initVal = 1000, mean = 1.5, sd = 1, length = dataLen)
-# ts.plot(dataVec, main = "Random walk process")
+par(mfrow = c(6, 1))
+
+source("synthetic_randomWalk.R")
+dataVec = synthetic_randomWalk(initVal = 1000, mean = 0, sd = 1, length = dataLen)
+ts.plot(dataVec, main = "Random walk process")
+
+
+outlierIndexs = sort(ceiling(runif(5, 1,dataLen)))
+
+outlierIndexs_IO = outlierIndexs[1]
+dataVec[outlierIndexs_IO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_IO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
+ts.plot(dataVec, main = "Example of (random) stationary time series with IO", ylab = expression(X[t]))
+
+outlierIndexs_LSO = outlierIndexs[2]
+dataVec[outlierIndexs_LSO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_LSO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
+ts.plot(dataVec, main = "Example of (random) stationary time series with LSO", ylab = expression(X[t]))
+
+outlierIndexs_TCO = outlierIndexs[3:4]
+dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
+ts.plot(dataVec, main = "Example of (random) stationary time series with TCO", ylab = expression(X[t]))
+
+outlierIndexs_VC = outlierIndexs[5]
+addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
+dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
+ts.plot(dataVec, main = "Example of (random) stationary time series with VC", ylab = expression(X[t]))
+
+outlierIndexs_AO = runif(10, 1, dataLen)
+dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 100 * runif(10, -5, 5)
+ts.plot(dataVec, main = "Example of (random) stationary time series with AO", ylab = expression(X[t]))
 
 
 ##### Moving Average of order q: MA(q)
