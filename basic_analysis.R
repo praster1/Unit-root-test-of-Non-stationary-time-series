@@ -19,13 +19,15 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 
 
-dataLen = 96*365*3
+dataLen = 96*365*3      # 105120
 
+
+rgeom(5, prob=0.005)
 
 ##### Simulation of a random time series
-# source("synthetic_pureRP.R")
-# dataVec = synthetic_pureRP(constMean = 1000, mean = 0, sd = 1, length = dataLen)
-# ts.plot(dataVec, main = "Example of (random) stationary time series", ylab = expression(X[t]))
+source("synthetic_pureRP.R")
+dataVec = synthetic_pureRP(constMean = 1000, mean = 0, sd = 1, length = dataLen)
+ts.plot(dataVec, main = "Example of (random) stationary time series", ylab = expression(X[t]))
 
 
 ##### Random Walk process simulation
