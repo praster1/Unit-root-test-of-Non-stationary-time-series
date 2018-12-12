@@ -1,23 +1,15 @@
 plotUnitRootTest_urpp = function(dataVec, analysisResult, critVal = 3, print=FALSE)
 {
-    len = length(dataVec$data)
-    for (i in 1:len)
-    {
-        testStat = analysisResult[[i]]@teststat[1]
-        cval = analysisResult[[i]]@cval[1,critVal]
-        
-        if (print)
-        {
-            print(paste("i:", i, "/", len, "     ", testStat < cval))
-        }
-        
-        if (testStat < cval)
-        {
-            points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="red", lwd=5);	
-        }
-        else
-        {
-            points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="black");	
-        }
+	source("plotUnitRootTest_returnCval.R")
+	source("plotUnitRootTest_returnTeststat.R")
+	
+	testStats = lapply(analysisResult, plotUnitRootTest_returnTeststat)
+	cVals = lapply(analysisResult, plotUnitRootTest_returnCval, critVal=critVal)
+	
+	which_testStats = which(testStat < cVals)
+	
+    for (i in which_testStats)
+	{
+		points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="red", lwd=5);	
     }
 }

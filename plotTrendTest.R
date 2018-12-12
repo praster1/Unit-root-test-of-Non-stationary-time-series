@@ -11,7 +11,7 @@ plotTrendTest = function(dataVec, type = "none", signIf = 0.05)
     coxres = lapply(dataVec$data, cox_stuart_test)
 	
 	testStats = lapply(coxres, plotTrendTest_returnStatistic)
-	which_testStats = which(temp < signIf)
+	which_testStats = which(testStats < signIf)
 	
     for (i in which_testStats)
     {

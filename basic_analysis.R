@@ -211,7 +211,7 @@ source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialL
 partialLen_Trend = 96*14
 stepSize_Trend = 96
 
-signif_Trend = 0.001
+
 
 sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
 
@@ -220,7 +220,6 @@ sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSi
 partialLen_UnitRoot = 96*3.5
 stepSize_UnitRoot = 96
 
-lag_UnitRoot = 12
 
 
 sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, stepSize=stepSize_UnitRoot)
@@ -241,8 +240,8 @@ source("plotUnitRootTest_urkpss.R")
 par(mfrow = c(6, 1))
 plotAll(dataVec, datetime)
 
-xlab = ""
-ylab = "Ylab"
+xlab = "Time Index"
+ylab = "X"
 
 
 
@@ -252,19 +251,19 @@ ylab = "Ylab"
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='trend')                                        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=1)       ### Unit Root Test
+plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3)       ### Unit Root Test
 
 # ADF Test: Drift
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='drift')                                         
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=1)       ### Unit Root Test
+plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3)       ### Unit Root Test
 
 
-# PP Test: Trend    #
+# PP Test: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', lags='short')             
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Trend")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=0.00001)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1)       ### Unit Root Test
 
 # PP Test: constant     #
