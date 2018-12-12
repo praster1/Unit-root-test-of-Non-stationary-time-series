@@ -6,7 +6,7 @@ plotUnitRootTest_ursp = function(dataVec, analysisResult, print=FALSE, lwd=5)
 	testStats = as.numeric(lapply(analysisResult, plotUnitRootTest_returnTeststat))
 	cVals = as.numeric(lapply(analysisResult, plotUnitRootTest_returnCval_ursp))
 	
-	which_testStats = which(testStats < cVals)
+	which_testStats = which(testStats > cVals)
 	
     for (i in which_testStats)
     {
