@@ -40,5 +40,6 @@ plotTrendTest = function(dataVec, type = "none", signIf = 0.05)
                 }
             }
         }
+		points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="black", lwd=5);	
     }
 }

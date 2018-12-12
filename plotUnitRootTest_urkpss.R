@@ -1,23 +1,15 @@
-plotUnitRootTest_urkpss = function(dataVec, analysisResult, critVal = 3, print=FALSE)
+plotUnitRootTest_urkpss = function(dataVec, analysisResult, critVal = 3, print=FALSE, lwd=5)
 {
-    len = length(dataVec$data)
-    for (i in 1:len)
+    source("plotUnitRootTest_returnCval.R")
+	source("plotUnitRootTest_returnTeststat.R")
+	
+	testStats = as.numeric(lapply(analysisResult, plotUnitRootTest_returnTeststat))
+	cVals = as.numeric(lapply(analysisResult, plotUnitRootTest_returnCval, critVal=critVal))
+	
+	which_testStats = which(testStats > cVals)
+	
+    for (i in which_testStats)
     {
-        testStat = analysisResult[[i]]@teststat[1]
-        cval = analysisResult[[i]]@cval[1,critVal]
-        
-        if (print)
-        {
-            print(paste("i:", i, "/", len, "     ", testStat > cval))
-        }
-        
-        if (testStat > cval)
-        {
-            points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="red", lwd=5);	
-        }
-        else
-        {
-            points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="black");	
-        }
+		points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="red", lwd=lwd);	
     }
 }

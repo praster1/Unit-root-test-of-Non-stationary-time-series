@@ -1,7 +1,7 @@
 plotAll = function(dataVec, datetimeVec, main = "Main", xlab="", ylab="power consumption(kWh)")
 {
 	# init
-    ts.plot(dataVec, main=main, xlab=xlab, ylab=ylab, axes=FALSE)
+    plot(dataVec, type="l", main=main, xlab=xlab, ylab=ylab, axes=FALSE)
 
 	# y축 axis
 	axis(2, dataVec, labels=seq(0, max(dataVec), by=50), at=seq(0, max(dataVec), by=50))
