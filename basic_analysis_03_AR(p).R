@@ -86,10 +86,10 @@ library(urca)
 source("plotAll.R")
 source("plotTrendTest.R")
 
-par(mfrow = c(6, 2))
-plotAll(dataVec, datetime)
+# par(mfrow = c(6, 2))
+# plotAll(dataVec, datetime)
 
-xlab = "Time Index"
+xlab = ""
 ylab = "X"
 
 
