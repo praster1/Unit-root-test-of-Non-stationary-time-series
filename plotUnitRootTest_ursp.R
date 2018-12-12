@@ -1,10 +1,10 @@
 plotUnitRootTest_ursp = function(dataVec, analysisResult, print=FALSE, lwd=5)
 {
-    source("plotUnitRootTest_returnCval.R")
+    source("plotUnitRootTest_returnCval_ursp.R")
 	source("plotUnitRootTest_returnTeststat.R")
 	
 	testStats = as.numeric(lapply(analysisResult, plotUnitRootTest_returnTeststat))
-	cVals = as.numeric(lapply(analysisResult, plotUnitRootTest_returnCval))
+	cVals = as.numeric(lapply(analysisResult, plotUnitRootTest_returnCval_ursp))
 	
 	which_testStats = which(testStats < cVals)
 	
