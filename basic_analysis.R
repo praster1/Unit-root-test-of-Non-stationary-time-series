@@ -48,32 +48,39 @@ outlierIndexs = sort(ceiling(runif(5, 1,(dataLen-1000))))
 
 # - 2. innovational outliers(IO)
 outlierIndexs_IO = outlierIndexs[1]
-dataVec[outlierIndexs_IO:dataLen] = synthetic_pureRP(constMean = 0, mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
-plot(dataVec, main = "Stationary time series with IO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
+dataVec_IO = dataVec
+dataVec_IO[outlierIndexs_IO:dataLen] = synthetic_pureRP(constMean = 0, mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
 
 # - 3. level shift outliers(LSO)
 outlierIndexs_LSO = outlierIndexs[2]
-dataVec[outlierIndexs_LSO:dataLen] = synthetic_pureRP(constMean = 0, mean = runif(1, -3, 3), sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
-plot(dataVec, main = "Stationary time series with LSO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
+dataVec_LSO = dataVec_IO
+dataVec_LSO[outlierIndexs_LSO:dataLen] = synthetic_pureRP(constMean = 0, mean = runif(1, -3, 3), sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
 
 # - 4. temporary chance outlers(TCO)
 outlierIndexs_TCO = outlierIndexs[3:4]
 dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
-plot(dataVec, main = "Stationary time series with TCO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
 
 # - 6. variance change(VC)
 outlierIndexs_VC = outlierIndexs[5]
 addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
 dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
-plot(dataVec, main = "Stationary time series with VC", ylab = expression(X[t]), type="l")
-points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
 
 # - 1. Additive Outliers (AO)
 outlierIndexs_AO = runif(10, 1, dataLen)
 dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 10 * runif(10, -5, 5)
+
+plot(dataVec, main = "Stationary time series with IO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
+
+plot(dataVec, main = "Stationary time series with LSO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
+
+plot(dataVec, main = "Stationary time series with TCO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
+
+plot(dataVec, main = "Stationary time series with VC", ylab = expression(X[t]), type="l")
+points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
+
 plot(dataVec, main = "Stationary time series with AO", ylab = expression(X[t]), type="l")
 points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
 
@@ -124,19 +131,36 @@ points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
 
 ##### Moving Average of order q: MA(q)
 # source("synthetic_MA1.R")
-# dataVec = synthetic_MA1(coef=-0.45, mean = 0, sd = 1, length = dataLen)
-# ts.plot(dataVec, main = "Moving Average or order 1 process")
+# dataVec = synthetic_MA1(coef=-0.45, mean = -5, sd = 1, length = dataLen)
+# plot(dataVec, main = "Moving Average or order 1 process", type="l")
 
 
 
 
 
 ##### Auto-Regressive of order p: AR(p)
-# source("synthetic_AR1.R")
-# dataVec = synthetic_AR1(initVal = 1, coef=-0.3, mean = 0, sd = 1.5, length = dataLen)
-# ts.plot(dataVec)
+source("synthetic_AR1.R")
+dataVec = synthetic_AR1(initVal = 10, coef=1, mean = runif(1, 0, 3), sd = 5, length = dataLen)
+plot(dataVec, type="l")
 
 
+absVec = rep(c(1, -1), length=10)
+changeIndex = c(1, sort(ceiling(runif(9, 1,(dataLen-1000)))), dataLen)
+dataVec = NULL;
+for (i in 1:10)
+{
+    initVal = NULL
+    if (i == 1) {
+        initVal = 10;    
+    } else {        
+        initVal = dataVec[changeIndex[i]-1];    
+    }
+    
+    dataVec[changeIndex[i]:changeIndex[i+1]] = synthetic_AR1(initVal = initVal, coef=1, mean = absVec[i]*runif(1, 0, 5), sd = runif(1, 0, 100), length = length(changeIndex[i]:changeIndex[i+1]))
+}
+
+plot(dataVec, type="l")
+points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
 
 
 
