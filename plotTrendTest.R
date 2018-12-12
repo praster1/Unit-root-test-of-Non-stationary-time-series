@@ -1,16 +1,21 @@
-plotTrendTest = function(dataVec, type = "none")
+plotTrendTest = function(dataVec, type = "none", signIf = 0.05)
 {
     ### Cox-Stuart Trend Test
     source("cox_stuart_test.R")
     source("cox_stuart_test_inc.R")
     source("cox_stuart_test_des.R")
 
+	source("plotTrendTest_returnStatistic.R")
+	
     unlistDataVec = unlist(dataVec)
-    len = length(dataVec$data)
     coxres = lapply(dataVec$data, cox_stuart_test)
-    for (i in 1:len)
+	
+	testStats = lapply(coxres, plotTrendTest_returnStatistic)
+	which_testStats = which(temp < signIf)
+	
+    for (i in which_testStats)
     {
-        if (as.numeric(coxres[[i]]$statistic) < signif_Trend)
+        if (as.numeric(coxres[[i]]$statistic) < signIf)
         {
             if (names(coxres[[i]]$statistic) == "Increasing trend, p-value")
             {

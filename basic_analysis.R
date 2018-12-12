@@ -32,7 +32,7 @@ par(mfrow = c(6, 1))
 
 source("synthetic_pureRP.R")
 dataVec = synthetic_pureRP(constMean = 0, mean = 0, sd = 1, length = dataLen)
-plot(dataVec, main = "Stationary time series", ylab = expression(X[t]), type="l")
+# plot(dataVec, main = "Stationary time series", ylab = expression(X[t]), type="l")
 
 
 
@@ -49,33 +49,33 @@ outlierIndexs = sort(ceiling(runif(5, 1,(dataLen-1000))))
 # - 2. innovational outliers(IO)
 outlierIndexs_IO = outlierIndexs[1]
 dataVec[outlierIndexs_IO:dataLen] = synthetic_pureRP(constMean = 0, mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
-plot(dataVec, main = "Stationary time series with IO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
+# plot(dataVec, main = "Stationary time series with IO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
 
 # - 3. level shift outliers(LSO)
 outlierIndexs_LSO = outlierIndexs[2]
 dataVec[outlierIndexs_LSO:dataLen] = synthetic_pureRP(constMean = 0, mean = runif(1, -3, 3), sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
-plot(dataVec, main = "Stationary time series with LSO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
+# plot(dataVec, main = "Stationary time series with LSO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
 
 # - 4. temporary chance outlers(TCO)
 outlierIndexs_TCO = outlierIndexs[3:4]
 dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
-plot(dataVec, main = "Stationary time series with TCO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
+# plot(dataVec, main = "Stationary time series with TCO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
 
 # - 6. variance change(VC)
 outlierIndexs_VC = outlierIndexs[5]
 addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
 dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
-plot(dataVec, main = "Stationary time series with VC", ylab = expression(X[t]), type="l")
-points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
+# plot(dataVec, main = "Stationary time series with VC", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
 
 # - 1. Additive Outliers (AO)
 outlierIndexs_AO = runif(10, 1, dataLen)
 dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 10 * runif(10, -5, 5)
-plot(dataVec, main = "Stationary time series with AO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
+# plot(dataVec, main = "Stationary time series with AO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
 
 
 
@@ -87,36 +87,36 @@ par(mfrow = c(6, 1))
 
 source("synthetic_randomWalk.R")
 dataVec = synthetic_randomWalk(initVal = 1000, mean = 0, sd = 1, length = dataLen)
-plot(dataVec, main = "Random Walk process", ylab = expression(X[t]), type="l")
+# plot(dataVec, main = "Random Walk process", ylab = expression(X[t]), type="l")
 
 
 outlierIndexs = sort(ceiling(runif(5, 1,dataLen)))
 
 outlierIndexs_IO = outlierIndexs[1]
 dataVec[outlierIndexs_IO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_IO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
-plot(dataVec, main = "Random Walk process with IO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with IO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
 
 outlierIndexs_LSO = outlierIndexs[2]
 dataVec[outlierIndexs_LSO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_LSO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
-plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
 
 outlierIndexs_TCO = outlierIndexs[3:4]
 dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
-plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
 
 outlierIndexs_VC = outlierIndexs[5]
 addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
 dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
-plot(dataVec, main = "Random Walk process with VC", ylab = expression(X[t]), type="l")
-points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with VC", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
 
 outlierIndexs_AO = runif(10, 1, dataLen)
 dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 100 * runif(10, -5, 5)
-plot(dataVec, main = "Random Walk process with AO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with AO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
 
 
 
@@ -135,7 +135,7 @@ set.seed(123456)
 ##### Auto-Regressive of order p: AR(p)
 source("synthetic_AR1.R")
 dataVec = synthetic_AR1(initVal = 10, coef=1, mean = runif(1, 0, 3), sd = 5, length = dataLen)
-plot(dataVec, type="l")
+# plot(dataVec, type="l")
 
 
 absVec = rep(c(1, -1), length=10)
@@ -153,8 +153,8 @@ for (i in 1:10)
     dataVec[changeIndex[i]:changeIndex[i+1]] = synthetic_AR1(initVal = initVal, coef=1, mean = absVec[i]*runif(1, 0, 5), sd = runif(1, 0, 100), length = length(changeIndex[i]:changeIndex[i+1]))
 }
 
-plot(dataVec, type="l")
-points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
+# plot(dataVec, type="l")
+# points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
 
 
 
@@ -238,72 +238,76 @@ source("plotUnitRootTest_ursp.R")
 source("plotUnitRootTest_urers.R")
 source("plotUnitRootTest_urkpss.R")
 
-par(mfrow = c(6, 2))
+par(mfrow = c(6, 1))
 plotAll(dataVec, datetime)
 
 xlab = ""
 ylab = "Ylab"
 
+
+
+
+
 # ADF Test: Trend
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag_UnitRoot, type='trend')                                        
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='trend')                                        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=1)       ### Unit Root Test
 
 # ADF Test: Drift
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag_UnitRoot, type='drift')                                         
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='drift')                                         
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=1)       ### Unit Root Test
 
 
 # PP Test: Trend    #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', lags='short')             
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Trend")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1)       ### Unit Root Test
 
 # PP Test: constant     #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', lags='short')        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: constant")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1)       ### Unit Root Test
 
 
 # ERS Test: DF-GLS: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=lag_UnitRoot)        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS: Trend")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend')                            
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1)       ### Unit Root Test
 
 
 # SP Test: tau   # error
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=lag_UnitRoot, signif=0.0001)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: tau")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes)       ### Unit Root Test
 
 # SP Test: rho      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=lag_UnitRoot, signif=0.00001)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes)       ### Unit Root Test
 
 
 # KPSS Test: mu     #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', lags='short')                              
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: mu")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1)       ### Unit Root Test
 
 # KPSS Test: tau        #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', lags='short')                              
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
-plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1)       ### Unit Root Test
