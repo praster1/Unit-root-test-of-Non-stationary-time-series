@@ -1,4 +1,4 @@
-plotUnitRootTest = function(dataVec, analysisResult, critVal = 3, print=FALSE)
+plotUnitRootTest_urers = function(dataVec, analysisResult, critVal = 3, print=FALSE)
 {
     len = length(dataVec$data)
     for (i in 1:len)

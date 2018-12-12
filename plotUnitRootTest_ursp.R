@@ -1,10 +1,10 @@
-plotUnitRootTest = function(dataVec, analysisResult, critVal = 3, print=FALSE)
+plotUnitRootTest_ursp = function(dataVec, analysisResult, print=FALSE)
 {
     len = length(dataVec$data)
     for (i in 1:len)
     {
         testStat = analysisResult[[i]]@teststat[1]
-        cval = analysisResult[[i]]@cval[1,critVal]
+        cval = analysisResult[[i]]@cval
         
         if (print)
         {
