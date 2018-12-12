@@ -2,8 +2,8 @@ rm(list = ls())
 
 
 
-# setwd("/home/lv999/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
-setwd("E:/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
+setwd("/home/lv999/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
+# setwd("E:/Dropbox/Github/Unit-root-test-of-Non-stationary-time-series")
 
 
 
@@ -220,8 +220,7 @@ sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSi
 partialLen_UnitRoot = 96*3.5
 stepSize_UnitRoot = 96
 
-lag_UnitRoot = 96
-signif_UnitRoot = 0.001
+lag_UnitRoot = 12
 
 
 sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, stepSize=stepSize_UnitRoot)
@@ -232,13 +231,14 @@ sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, 
 
 library(urca)
 source("plotAll.R")
+source("plotTrendTest.R")
 source("plotUnitRootTest_urdf.R")
 source("plotUnitRootTest_urpp.R")
 source("plotUnitRootTest_ursp.R")
 source("plotUnitRootTest_urers.R")
 source("plotUnitRootTest_urkpss.R")
 
-par(mfrow = c(1, 1))
+par(mfrow = c(6, 2))
 plotAll(dataVec, datetime)
 
 xlab = ""
@@ -248,13 +248,13 @@ ylab = "Ylab"
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag_UnitRoot, type='trend')                                        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
 plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
-plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3)       ### Unit Root Test
+plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=1)       ### Unit Root Test
 
 # ADF Test: Drift
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=lag_UnitRoot, type='drift')                                         
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
 plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
-plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3)       ### Unit Root Test
+plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=1)       ### Unit Root Test
 
 
 # PP Test: Trend    #
@@ -284,13 +284,13 @@ plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1)       ### Uni
 
 
 # SP Test: tau   # error
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=lag_UnitRoot, signif=signif_UnitRoot)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=lag_UnitRoot, signif=0.0001)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: tau")
 plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
 plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes)       ### Unit Root Test
 
 # SP Test: rho      #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=lag_UnitRoot, signif=signif_UnitRoot)         
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=lag_UnitRoot, signif=0.00001)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
 plotTrendTest(sampleVec_Trend, type="none")     ### Trend Test
 plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes)       ### Unit Root Test

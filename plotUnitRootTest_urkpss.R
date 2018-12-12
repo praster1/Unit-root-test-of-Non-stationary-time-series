@@ -8,10 +8,10 @@ plotUnitRootTest_urkpss = function(dataVec, analysisResult, critVal = 3, print=F
         
         if (print)
         {
-            print(paste("i:", i, "/", len, "     ", testStat < cval))
+            print(paste("i:", i, "/", len, "     ", testStat > cval))
         }
         
-        if (testStat < cval)
+        if (testStat > cval)
         {
             points(dataVec$index[[i]], dataVec$data[[i]], type="l", col="red", lwd=5);	
         }
