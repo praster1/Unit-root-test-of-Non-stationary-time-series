@@ -26,7 +26,7 @@ dataLen = 96*365
 
 
 
-set.seed(123456)
+set.seed(123)
 ##### Random Walk process simulation
 par(mfrow = c(6, 1))
 
@@ -39,29 +39,29 @@ outlierIndexs = sort(ceiling(runif(5, 1,dataLen)))
 
 outlierIndexs_IO = outlierIndexs[1]
 dataVec[outlierIndexs_IO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_IO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
-# plot(dataVec, main = "Random Walk process with IO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
+plot(dataVec, main = "Random Walk process with IO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
 
 outlierIndexs_LSO = outlierIndexs[2]
 dataVec[outlierIndexs_LSO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_LSO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
-# plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
+plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
 
 outlierIndexs_TCO = outlierIndexs[3:4]
 dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
-# plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
+plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
 
 outlierIndexs_VC = outlierIndexs[5]
 addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
 dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
-# plot(dataVec, main = "Random Walk process with VC", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
+plot(dataVec, main = "Random Walk process with VC", ylab = expression(X[t]), type="l")
+points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
 
 outlierIndexs_AO = runif(10, 1, dataLen)
 dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 100 * runif(10, -5, 5)
-# plot(dataVec, main = "Random Walk process with AO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
+plot(dataVec, main = "Random Walk process with AO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
 
 
 
@@ -127,25 +127,25 @@ source("plotUnitRootTest_urpp.R")
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # PP Test: Trend    #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 
 source("plotUnitRootTest_urers.R")
@@ -153,25 +153,25 @@ source("plotUnitRootTest_urers.R")
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: DF-GLS: Constant
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Constent")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend', lag.max=12)                
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='constant', lag.max=12)                   
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 
 source("plotUnitRootTest_ursp.R")
@@ -193,10 +193,10 @@ source("plotUnitRootTest_urkpss.R")
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: mu")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=TRUE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=TRUE, lwd=3)       ### Unit Root Test
 
 # KPSS Test: tau        #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=12)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=TRUE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=TRUE, lwd=3)       ### Unit Root Test

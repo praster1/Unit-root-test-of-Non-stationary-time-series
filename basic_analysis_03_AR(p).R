@@ -48,8 +48,9 @@ for (i in 1:10)
     dataVec[changeIndex[i]:changeIndex[i+1]] = synthetic_AR1(initVal = initVal, coef=1, mean = absVec[i]*runif(1, 0, 5), sd = runif(1, 0, 100), length = length(changeIndex[i]:changeIndex[i+1]))
 }
 
-# plot(dataVec, type="l")
-# points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
+par(mfrow = c(1, 1))
+plot(dataVec, type="l")
+points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
 
 
 
