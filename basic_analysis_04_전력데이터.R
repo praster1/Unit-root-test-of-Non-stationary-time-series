@@ -163,13 +163,13 @@ plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, lwd=3)       ### Unit Roo
 
 source("plotUnitRootTest_urkpss.R")
 # KPSS Test: mu     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=96)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: mu")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
 
 # KPSS Test: tau        #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=96)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
