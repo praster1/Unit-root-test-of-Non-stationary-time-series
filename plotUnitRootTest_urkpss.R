@@ -1,4 +1,4 @@
-plotUnitRootTest_urkpss = function(dataVec, analysisResult, critVal = 3, type="mu", print=FALSE, lwd=5)
+plotUnitRootTest_urkpss = function(dataVec, analysisResult, critVal = 3, print=FALSE, testReverse=FALSE, lwd=5)
 {
     source("plotUnitRootTest_returnCval.R")
 	source("plotUnitRootTest_returnTeststat.R")
@@ -7,11 +7,13 @@ plotUnitRootTest_urkpss = function(dataVec, analysisResult, critVal = 3, type="m
 	cVals = as.numeric(lapply(analysisResult, plotUnitRootTest_returnCval, critVal=critVal))
 	
 	which_testStats = NULL
-	if (type=="mu")	{
+	
+	if (!testReverse) {
 		which_testStats = which(testStats > cVals)
 	} else {
 		which_testStats = which(testStats < cVals)
 	}
+	
 	
     for (i in which_testStats)
     {
