@@ -20,7 +20,6 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 
 
-# dataLen = 96*365*3      # 105120
 dataLen = 96*365
 
 
@@ -50,33 +49,33 @@ outlierIndexs = sort(ceiling(runif(5, 1,(dataLen-1000))))
 # - 2. innovational outliers(IO)
 outlierIndexs_IO = outlierIndexs[1]
 dataVec[outlierIndexs_IO:dataLen] = synthetic_pureRP(constMean = 0, mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
-# plot(dataVec, main = "Stationary time series with IO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
+plot(dataVec, main = "Stationary time series with IO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
 
 # - 3. level shift outliers(LSO)
 outlierIndexs_LSO = outlierIndexs[2]
 dataVec[outlierIndexs_LSO:dataLen] = synthetic_pureRP(constMean = 0, mean = runif(1, -3, 3), sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
-# plot(dataVec, main = "Stationary time series with LSO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
+plot(dataVec, main = "Stationary time series with LSO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
 
 # - 4. temporary chance outlers(TCO)
 outlierIndexs_TCO = outlierIndexs[3:4]
 dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
-# plot(dataVec, main = "Stationary time series with TCO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
+plot(dataVec, main = "Stationary time series with TCO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
 
 # - 6. variance change(VC)
 outlierIndexs_VC = outlierIndexs[5]
 addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
 dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
-# plot(dataVec, main = "Stationary time series with VC", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
+plot(dataVec, main = "Stationary time series with VC", ylab = expression(X[t]), type="l")
+points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
 
 # - 1. Additive Outliers (AO)
 outlierIndexs_AO = runif(10, 1, dataLen)
 dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 10 * runif(10, -5, 5)
-# plot(dataVec, main = "Stationary time series with AO", ylab = expression(X[t]), type="l")
-# points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
+plot(dataVec, main = "Stationary time series with AO", ylab = expression(X[t]), type="l")
+points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
 
 
 
@@ -139,25 +138,25 @@ plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3,
 
 source("plotUnitRootTest_urpp.R")
 # PP Test: Trend    #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=4)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=4)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # PP Test: Trend    #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=4)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=TRUE, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=4)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=TRUE, lwd=3)       ### Unit Root Test
@@ -165,16 +164,16 @@ plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=TR
 
 source("plotUnitRootTest_urers.R")
 # ERS Test: DF-GLS: Trend
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=(96/2))
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=TRUE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: DF-GLS: Constant
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=96)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Constent")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=TRUE, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend', lag.max=12)                
@@ -197,7 +196,7 @@ plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend T
 plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=TRUE, lwd=3)       ### Unit Root Test
 
 # SP Test: rho      #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=12, signif=0.0001)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=12, signif=0.00001)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=TRUE, lwd=3)       ### Unit Root Test

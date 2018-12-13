@@ -123,13 +123,13 @@ plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FA
 
 source("plotUnitRootTest_urers.R")
 # ERS Test: DF-GLS: Trend
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=(96/2))
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: DF-GLS: Constant
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=12)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=96)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Constent")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
