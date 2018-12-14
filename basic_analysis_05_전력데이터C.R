@@ -20,20 +20,14 @@ source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 �
 
 
 
-# dataLen = 96*365*3      # 105120
-
-
-
-
-
 ##### 전력데이터
 # Building A : 녹지캠
 # Building B : 인문대          # 86641번째 index가 NA
 # Building C : 하나과학관
 
-data = read.csv("./datasets/buildingA_15min.csv")
+data = read.csv("./datasets/buildingC_15min.csv")
 dataVec = data[,5]
-datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
+datetime = seqDatetime_byLength(startDate="2015-09-02", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
 
 indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
 res = getCalcVec(dataVec, indexVec, calc="sum")
@@ -41,6 +35,9 @@ temp = cbind(indexVec, res)
 dataVec = as.numeric(temp[,2])
 dataLen = length(dataVec)
 
+par(mfrow = c(6, 1))
+source("plotAll.R")
+plotAll(dataVec, datetime)
 
 
 
@@ -68,11 +65,10 @@ sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, 
 
 
 library(urca)
-source("plotAll.R")
 source("plotTrendTest.R")
 
 par(mfrow = c(6, 2))
-# plotAll(dataVec, datetime)
+plotAll(dataVec, datetime)
 
 xlab = ""
 ylab = "X"
@@ -95,8 +91,8 @@ plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend T
 plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 
-##source("plotUnitRootTest_urpp.R")
-PP Test: Trend    #
+source("plotUnitRootTest_urpp.R")
+##PP Test: Trend    #
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=96)
 # plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Trend")
 # plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
