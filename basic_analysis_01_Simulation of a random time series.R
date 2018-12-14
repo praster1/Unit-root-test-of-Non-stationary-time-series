@@ -32,7 +32,7 @@ par(mfrow = c(6, 1))
 
 source("synthetic_pureRP.R")
 dataVec = synthetic_pureRP(constMean = 0, mean = 0, sd = 1, length = dataLen)
-# plot(dataVec, main = "Stationary time series", ylab = expression(X[t]), type="l")
+plot(dataVec, main = "Stationary time series", ylab = expression(X[t]), type="l")
 
 
 
@@ -112,8 +112,8 @@ library(urca)
 source("plotAll.R")
 source("plotTrendTest.R")
 
-# par(mfrow = c(6, 2))
-# plotAll(dataVec, datetime)
+par(mfrow = c(6, 2))
+plotAll(dataVec, datetime, main="Stationary time series with outliers")
 
 xlab = ""
 ylab = "X"
@@ -121,7 +121,7 @@ ylab = "X"
 
 
 
-par(mfrow = c(7, 2))
+# par(mfrow = c(7, 2))
 source("plotUnitRootTest_urdf.R")
 # ADF Test: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='trend')                                        
@@ -137,17 +137,17 @@ plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3,
 
 
 source("plotUnitRootTest_urpp.R")
-# PP Test: Trend    #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=4)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Trend")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+## PP Test: Trend    #
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=4)
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Trend")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
-# PP Test: constant     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=4)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Constant")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+## PP Test: constant     #
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=4)
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Constant")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # PP Test: Trend    #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=4)
@@ -203,11 +203,11 @@ plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=TRUE, lwd=3) 
 
 
 source("plotUnitRootTest_urkpss.R")
-# KPSS Test: mu     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=12)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: mu")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+## KPSS Test: mu     #
+# analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=12)
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: mu")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # KPSS Test: tau        #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=12)
