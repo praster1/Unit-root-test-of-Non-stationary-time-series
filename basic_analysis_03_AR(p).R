@@ -32,7 +32,7 @@ source("synthetic_AR1.R")
 
 par(mfrow = c(6, 1))
 dataVec = synthetic_AR1(initVal = 10, coef=1, mean = runif(1, 0, 3), sd = 5, length = dataLen)
-plot(dataVec, type="l")
+plot(dataVec, type="l", main="AR(1)")
 
 
 absVec = rep(c(1, -1), length=10)
@@ -51,7 +51,7 @@ for (i in 1:10)
 }
 
 
-plot(dataVec, type="l")
+plot(dataVec, type="l", main="AR(1)")
 changeIndex = changeIndex[-1]
 points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
 
