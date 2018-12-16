@@ -35,7 +35,7 @@ temp = cbind(indexVec, res)
 dataVec = as.numeric(temp[,2])
 dataLen = length(dataVec)
 
-par(mfrow = c(6, 1))
+par(mfrow = c(3, 1))
 source("plotAll.R")
 plotAll(dataVec, datetime)
 
