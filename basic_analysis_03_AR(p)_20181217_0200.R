@@ -32,7 +32,7 @@ source("synthetic_AR1.R")
 
 par(mfrow = c(6, 1))
 dataVec = synthetic_AR1(initVal = 10, coef=1, mean = runif(1, 0, 3), sd = 5, length = dataLen)
-# plot(dataVec, type="l", main="AR(1)")
+plot(dataVec, type="l", main="AR(1)")
 
 
 absVec = rep(c(1, -1), length=10)
@@ -51,9 +51,9 @@ for (i in 1:10)
 }
 
 
-# plot(dataVec, type="l", main="AR(1)")
+plot(dataVec, type="l", main="AR(1)")
 changeIndex = changeIndex[-1]
-# points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
+points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
 
 
 
@@ -89,10 +89,9 @@ sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, 
 library(urca)
 source("plotAll.R")
 source("plotTrendTest.R")
-source("IDXGap.R")
 
-# par(mfrow = c(6, 2))
-# plotAll(dataVec, datetime)
+par(mfrow = c(6, 2))
+plotAll(dataVec, datetime)
 
 xlab = ""
 ylab = "X"
@@ -104,25 +103,15 @@ ylab = "X"
 source("plotUnitRootTest_urdf.R")
 # ADF Test: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='trend')                                        
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
-
-
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ADF Test: Drift
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='drift')                                         
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 
 source("plotUnitRootTest_urpp.R")
@@ -140,91 +129,55 @@ source("plotUnitRootTest_urpp.R")
 
 # PP Test: Trend    #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=12)
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=12)
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Constant")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Constant")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 
 source("plotUnitRootTest_urers.R")
 # ERS Test: DF-GLS: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=12)
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Trend")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
-
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Trend")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: DF-GLS: Constant
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=12)
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Constent")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
-
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Constent")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend', lag.max=12)                
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Trend")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
-
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Trend")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='constant', lag.max=12)                   
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Constant")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Constant")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 
 source("plotUnitRootTest_ursp.R")
 # SP Test: tau   #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=12, signif=0.00001)
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: tau")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], testReverse=FALSE, ursp=TRUE))}
-IDXGap_CI
-
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: tau")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 # SP Test: rho      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=12, signif=0.00001)
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], testReverse=FALSE, ursp=TRUE))}
-IDXGap_CI
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
 
 source("plotUnitRootTest_urkpss.R")
@@ -236,10 +189,6 @@ source("plotUnitRootTest_urkpss.R")
 
 # KPSS Test: tau        #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=12)
-# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
-# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-# plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=TRUE, lwd=3)       ### Unit Root Test
-
-IDXGap_CI = NULL
-for (i in 1:10){	IDXGap_CI = c(IDXGap_CI, IDXGap(sampleVec_UnitRoot$index, analysisRes, changeIndex[i], critVal=2, testReverse=FALSE))}
-IDXGap_CI
+plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
+plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=2, testReverse=TRUE, lwd=3)       ### Unit Root Test

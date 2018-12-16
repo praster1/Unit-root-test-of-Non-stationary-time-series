@@ -28,40 +28,40 @@ dataLen = 96*365
 
 set.seed(234567)
 ##### Random Walk process simulation
-par(mfrow = c(6, 1))
+# par(mfrow = c(6, 1))
 
 source("synthetic_randomWalk.R")
 dataVec = synthetic_randomWalk(initVal = 1000, mean = 0, sd = 1, length = dataLen)
-plot(dataVec, main = "Random Walk process", ylab = expression(X[t]), type="l")
+# plot(dataVec, main = "Random Walk process", ylab = expression(X[t]), type="l")
 
 
 outlierIndexs = sort(ceiling(runif(5, 1,dataLen)))
 
 outlierIndexs_IO = outlierIndexs[1]
 dataVec[outlierIndexs_IO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_IO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_IO:dataLen))
-plot(dataVec, main = "Random Walk process with IO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with IO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_IO, dataVec[outlierIndexs_IO], col="red", lwd=5)
 
 outlierIndexs_LSO = outlierIndexs[2]
 dataVec[outlierIndexs_LSO:dataLen] = synthetic_randomWalk(initVal = dataVec[outlierIndexs_LSO-1], mean = 0, sd = runif(1, 0, 3), length = length(outlierIndexs_LSO:dataLen))
-plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_LSO, dataVec[outlierIndexs_LSO], col="red", lwd=5)
 
 outlierIndexs_TCO = outlierIndexs[3:4]
 dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] = dataVec[outlierIndexs_TCO[1]:outlierIndexs_TCO[2]] + runif(1, -3, 3)
-plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with TCO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_TCO, dataVec[outlierIndexs_TCO], col="red", lwd=5)
 
 outlierIndexs_VC = outlierIndexs[5]
 addVarianceVec = seq(1, 3, length=length(outlierIndexs_VC:dataLen))
 dataVec[outlierIndexs_VC:dataLen] = dataVec[outlierIndexs_VC:dataLen] * addVarianceVec
-plot(dataVec, main = "Random Walk process with VC", ylab = expression(X[t]), type="l")
-points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with VC", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_VC, dataVec[outlierIndexs_VC], col="red", lwd=5)
 
 outlierIndexs_AO = runif(10, 1, dataLen)
 dataVec[outlierIndexs_AO] = dataVec[outlierIndexs_AO] + 100 * runif(10, -5, 5)
-plot(dataVec, main = "Random Walk process with AO", ylab = expression(X[t]), type="l")
-points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
+# plot(dataVec, main = "Random Walk process with AO", ylab = expression(X[t]), type="l")
+# points(outlierIndexs_AO, dataVec[outlierIndexs_AO], col="red", lwd=5)
 
 
 
@@ -97,9 +97,10 @@ sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, 
 library(urca)
 source("plotAll.R")
 source("plotTrendTest.R")
+source("IDXGap.R")
 
-par(mfrow = c(6, 2))
-plotAll(dataVec, datetime, main="Random Walk process with Outliers")
+# par(mfrow = c(6, 2))
+# plotAll(dataVec, datetime, main="Random Walk process with Outliers")
 
 xlab = ""
 ylab = "X"
@@ -111,15 +112,30 @@ ylab = "X"
 source("plotUnitRootTest_urdf.R")
 # ADF Test: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='trend')                                        
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=3, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=3, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=3, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=3, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=3, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
+
 
 # ADF Test: Drift
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='drift')                                         
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=3, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=3, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=3, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=3, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=3, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
 
 
 source("plotUnitRootTest_urpp.R")
@@ -129,6 +145,7 @@ source("plotUnitRootTest_urpp.R")
 # plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 # plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
 
+
 ## PP Test: constant     #
 # analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=12)
 # plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Constant")
@@ -137,55 +154,116 @@ source("plotUnitRootTest_urpp.R")
 
 # PP Test: Trend    #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=12)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=1, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=1, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=1, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=1, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=1, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
+
 
 # PP Test: constant     #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=12)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Constant")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Constant")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=1, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=1, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=1, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=1, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=1, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
 
 
 source("plotUnitRootTest_urers.R")
 # ERS Test: DF-GLS: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=12)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Trend")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Trend")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=1, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=1, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=1, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=1, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=1, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
+
 
 # ERS Test: DF-GLS: Constant
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=12)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Constent")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS, Constent")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=1, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=1, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=1, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=1, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=1, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
+
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend', lag.max=12)                
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Trend")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Trend")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=1, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=1, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=1, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=1, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=1, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
+
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='constant', lag.max=12)                   
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Constant")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test, Constant")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=1, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=1, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=1, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=1, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=1, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
 
 
 source("plotUnitRootTest_ursp.R")
 # SP Test: tau   #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=12, signif=0.00001)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: tau")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: tau")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, testReverse=FALSE, ursp=TRUE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, testReverse=FALSE, ursp=TRUE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], testReverse=FALSE, ursp=TRUE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], testReverse=FALSE, ursp=TRUE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, testReverse=FALSE, ursp=TRUE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
+
 
 # SP Test: rho      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=12, signif=0.00001)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, testReverse=FALSE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, testReverse=FALSE, ursp=TRUE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, testReverse=FALSE, ursp=TRUE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], testReverse=FALSE, ursp=TRUE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], testReverse=FALSE, ursp=TRUE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, testReverse=FALSE, ursp=TRUE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
 
 
 source("plotUnitRootTest_urkpss.R")
@@ -197,6 +275,13 @@ source("plotUnitRootTest_urkpss.R")
 
 # KPSS Test: tau        #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=12)
-plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
-plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=TRUE, lwd=3)       ### Unit Root Test
+# plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
+# plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
+# plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, testReverse=TRUE, lwd=3)       ### Unit Root Test
+
+IDXGap_IO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_IO, critVal=1, testReverse=FALSE)
+IDXGap_LSO = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_LSO, critVal=1, testReverse=FALSE)
+IDXGap_TCO1 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[1], critVal=1, testReverse=FALSE)
+IDXGap_TCO2 = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_TCO[2], critVal=1, testReverse=FALSE)
+IDXGap_VC = IDXGap(sampleVec_UnitRoot$index, analysisRes, outlierIndexs_VC, critVal=1, testReverse=FALSE)
+c(IDXGap_IO, IDXGap_LSO, IDXGap_TCO1, IDXGap_TCO2, IDXGap_VC)
