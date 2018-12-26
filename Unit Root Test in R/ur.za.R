@@ -19,7 +19,8 @@ ur.za = function (y, model = c("intercept", "trend", "both"), lag = NULL)
 	
     datmat = matrix(NA, n, lag + 3)
 	
-    if (n < ncol(datmat) + 2) {
+    if (n < ncol(datmat) + 2) 
+	{
         stop("\nInsufficient number of obeservations.")
     }
 	
@@ -31,13 +32,15 @@ ur.za = function (y, model = c("intercept", "trend", "both"), lag = NULL)
     datmat = as.data.frame(datmat)
     colnames(datmat)[1:3] = c("y", "y.l1", "trend")
 	
-    if (lag > 0) {
+    if (lag > 0) 
+	{
         for (i in 1:lag) 
 		{
             datmat[, i + 3] = c(rep(NA, i + 1), diff(y))[1:n]
         }
         colnames(datmat) = c("y", "y.l1", "trend", paste("y.dl", 1:lag, sep = ""))
     }
+	
     if (model == "intercept") 
 	{
         roll = function(z) 
