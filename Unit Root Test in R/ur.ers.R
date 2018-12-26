@@ -54,11 +54,15 @@ ur.ers = function (y, type = c("DF-GLS", "P-test"), model = c("constant", "trend
 	
     if (type == "P-test") 
 	{
-        cvals.ptest = array(c(1.87, 1.95, 1.91, 1.99, 2.97, 
-            3.11, 3.17, 3.26, 3.91, 4.17, 4.33, 4.48, 4.22, 4.26, 
-            4.05, 3.96, 5.72, 5.64, 5.66, 5.62, 6.77, 6.79, 6.86, 
-            6.89), c(4, 3, 2))
+        cvals.ptest = array(	c(	1.87, 1.95, 1.91, 1.99, 2.97, 
+									3.11, 3.17, 3.26, 3.91, 4.17,
+									4.33, 4.48, 4.22, 4.26, 4.05,
+									3.96, 5.72, 5.64, 5.66, 5.62,
+									6.77, 6.79, 6.86, 6.89),
+								c(4, 3, 2)
+							)
         res = residuals(yd.reg)
+		
         if (model == "constant") {
             null.res = c(0, diff(y))
             cvals = as.matrix(t(cvals.ptest[rowsel, , 1]))
@@ -70,8 +74,10 @@ ur.ers = function (y, type = c("DF-GLS", "P-test"), model = c("constant", "trend
             cvals = as.matrix(t(cvals.ptest[rowsel, , 2]))
             model = "with intercept and trend"
         }
+		
         sig.null = sum(null.res^2)
         sig.res = sum(res^2)
+		
         if (lag.max > 1) {
             bic = sapply(idx, what, z = y)
             BIC.opt = which.min(bic) + 1
@@ -103,7 +109,10 @@ ur.ers = function (y, type = c("DF-GLS", "P-test"), model = c("constant", "trend
 							)
             model = "with intercept"
         } else if (model == "trend") {
-            cvals.dfgls.tau = matrix(-1 * c(3.77, 3.58, 3.46, 3.48, 3.19, 3.03, 2.93, 2.89, 2.89, 2.74, 2.64, 2.57), nrow = 4, ncol = 3)
+            cvals.dfgls.tau = matrix(-1 * c(3.77, 3.58, 3.46, 3.48, 3.19,
+											3.03, 2.93, 2.89, 2.89, 2.74,
+											2.64, 2.57),
+									nrow = 4, ncol = 3)
             cvals = as.matrix(t(cvals.dfgls.tau[rowsel, ]))
             model = "with intercept and trend"
         }
