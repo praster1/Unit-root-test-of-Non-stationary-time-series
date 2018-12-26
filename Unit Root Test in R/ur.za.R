@@ -1,3 +1,4 @@
+### Zivot-Andrews Test
 ur.za = function (y, model = c("intercept", "trend", "both"), lag = NULL) 
 {
     y = na.omit(as.vector(y))
