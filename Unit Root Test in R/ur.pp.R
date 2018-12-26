@@ -106,6 +106,7 @@ ur.pp = function (x, type = c("Z-alpha", "Z-tau"), model = c("constant", "trend"
             cval = as.matrix(t(c(NA, NA, NA)))
         }
     }
+	
     new("ur.pp", 
 		y = y,
 		type = type,

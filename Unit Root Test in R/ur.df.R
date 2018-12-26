@@ -199,6 +199,7 @@ ur.df = function (y, type = c("none", "drift", "trend"), lags = 1, selectlags = 
     }
     colnames(cvals) = c("1pct", "5pct", "10pct")
     rownames(cvals) = testnames
+	
     new("ur.df",
 		y = y,
 		model = type,

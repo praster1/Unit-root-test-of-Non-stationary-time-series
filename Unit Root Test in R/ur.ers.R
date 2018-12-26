@@ -137,6 +137,7 @@ ur.ers = function (y, type = c("DF-GLS", "P-test"), model = c("constant", "trend
     }
     colnames(cvals) = c("1pct", "5pct", "10pct")
     rownames(cvals) = c("critical values")
+	
     new("ur.ers", 
 		y = y,
 		yd = yd,
