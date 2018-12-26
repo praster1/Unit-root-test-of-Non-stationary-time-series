@@ -206,5 +206,6 @@ ur.df = function (y, type = c("none", "drift", "trend"), lags = 1, selectlags = 
 		teststat = teststat,
 		testreg = testreg,
 		res = res,
-		test.name = "Augmented Dickey-Fuller Test")
+		test.name = "Augmented Dickey-Fuller Test"
+	)
 }
