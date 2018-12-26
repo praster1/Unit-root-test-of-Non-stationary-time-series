@@ -31,6 +31,7 @@ ur.df = function (y, type = c("none", "drift", "trend"), lags = 1, selectlags = 
     z.diff = x[, 1]
     z.lag.1 = y[lags:n]
     tt = lags:n
+	
     if (lags > 1) 
 	{
         if (selectlags != "Fixed") 
