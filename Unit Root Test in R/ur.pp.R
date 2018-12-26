@@ -1,3 +1,4 @@
+### PP Test
 ur.pp = function (x, type = c("Z-alpha", "Z-tau"), model = c("constant", "trend"), lags = c("short", "long"), use.lag = NULL) 
 {
     x = na.omit(as.vector(x))

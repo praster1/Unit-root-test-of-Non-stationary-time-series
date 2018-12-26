@@ -1,3 +1,4 @@
+### ADF Test
 ur.df = function (y, type = c("none", "drift", "trend"), lags = 1, selectlags = c("Fixed", "AIC", "BIC")) 
 {
     selectlags = match.arg(selectlags)
