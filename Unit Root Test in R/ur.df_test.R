@@ -23,9 +23,9 @@ y = c(	-0.63879800,	0.06408028,		0.48604897,		-1.58697346,	0.30119843,
 		-0.78609945,	0.14488176,		0.04472911,		-0.39526862,	-1.49188673,
 		1.12522571,		-1.29881997,	-1.07821846,	-0.34596076,	0.61521773,
 		0.41804365,		-1.32955607,	0.38376991,		0.76712652,		-0.58262202)
-type = c("none", "drift", "trend")
+type = "none"		#type = c("none", "drift", "trend")
 lags = 1
-selectlags = c("Fixed", "AIC", "BIC")
+selectlags = "Fixed"		# selectlags = c("Fixed", "AIC", "BIC")
 
 
     selectlags = match.arg(selectlags)
