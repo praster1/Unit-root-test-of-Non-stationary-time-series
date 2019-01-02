@@ -44,3 +44,21 @@ def trycatch_lag(lag):
 			raise ValueError
 	except ValueError:
 		 print('Lags must be set to an non negative integer value.')
+
+
+### embed function: wrong embedding dimension / dimension < 1
+def trycatch_embed(dimension):
+ 	try:
+		if (dimension < 1):
+			raise ValueError
+	except ValueError:
+		 print('wrong embedding dimension')
+		 
+
+### embed function: wrong embedding dimension / dimension > n
+def trycatch_embed(dimension, n):
+ 	try:
+		if (dimension > n):
+			raise ValueError
+	except ValueError:
+		 print('wrong embedding dimension')
