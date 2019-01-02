@@ -6,7 +6,8 @@ embed = function (x, dimension = 1)
         if ((dimension < 1) | (dimension > n)) 
             stop("wrong embedding dimension")
         y <- matrix(0, n - dimension + 1L, dimension * m)
-        for (i in seq_len(m)) y[, seq.int(i, by = m, length.out = dimension)] <- Recall(as.vector(x[, i]), dimension)
+        for (i in seq_len(m)) 
+			y[, seq.int(i, by = m, length.out = dimension)] <- Recall(as.vector(x[, i]), dimension)
         return(y)
     }
     else if (is.vector(x) || is.ts(x)) {
