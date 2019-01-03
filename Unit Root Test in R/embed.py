@@ -1,3 +1,4 @@
+# Embeds the time series x into a low-dimensional Euclidean space.
 def embed(x, dimension = 1):
     x = np.array(x)
     n = np.size(x)

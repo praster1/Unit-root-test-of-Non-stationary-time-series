@@ -47,18 +47,18 @@ def trycatch_lag(lag):
 
 
 ### embed function: wrong embedding dimension / dimension < 1
-def trycatch_embed(dimension):
- 	try:
-		if dimension < 1:
-			raise ValueError
-	except ValueError:
-		 print('wrong embedding dimension')
-		 
+def trycatch_embed1(dimension):
+    try:
+        if dimension < 1:
+            raise ValueError
+    except ValueError:
+        print('wrong embedding dimension')
+
 
 ### embed function: wrong embedding dimension / dimension > n
-def trycatch_embed(dimension, n):
- 	try:
-		if (dimension > n):
-			raise ValueError
-	except ValueError:
-		 print('wrong embedding dimension')
+def trycatch_embed2(dimension, n):
+    try:
+        if dimension > n:
+            raise ValueError
+    except ValueError:
+        print('wrong embedding dimension')
