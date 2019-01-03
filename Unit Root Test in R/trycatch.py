@@ -49,7 +49,7 @@ def trycatch_lag(lag):
 ### embed function: wrong embedding dimension / dimension < 1
 def trycatch_embed(dimension):
  	try:
-		if (dimension < 1):
+		if dimension < 1:
 			raise ValueError
 	except ValueError:
 		 print('wrong embedding dimension')
