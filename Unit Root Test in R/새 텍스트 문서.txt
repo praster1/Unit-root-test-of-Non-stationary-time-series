@@ -1,0 +1,14 @@
+ADF Test
+http://www.insightsbot.com/blog/1MH61d/augmented-dickey-fuller-test-in-python
+
+
+PP Test
+https://www.google.com/search?num=100&ei=7bguXOe5EZK40PEPyrCskAs&q=Phillips-Perron+Test+in+python&oq=Phillips-Perron+Test+in+python&gs_l=psy-ab.3..0i30.32851.32851..33073...0.0..0.110.110.0j1......0....1j2..gws-wiz.Cj8rCYTCHQ0
+
+
+KPSS Test
+https://www.google.com/search?num=100&source=hp&ei=orYuXPGAB4yi8QW0uK2IDQ&q=KPSS+Test+in+python&btnK=Google+%EA%B2%80%EC%83%89&oq=KPSS+Test+in+python&gs_l=psy-ab.3..0i203.203.2986..3096...0.0..0.134.2050.9j11......0....1..gws-wiz.....0..0j35i39j0i67j0i131j0i131i67j0i20i263j0i8i30.yjEJ9YYYJX4
+
+
+SP Test
+https://www.google.com/search?num=100&source=hp&ei=MbkuXOBtg_byBbiApMAC&q=Schmidt-Phillips+in+python&btnK=Google+%EA%B2%80%EC%83%89&oq=Schmidt-Phillips+in+python&gs_l=psy-ab.3...315.4618..4751...0.0..1.163.1387.1j11......0....1j2..gws-wiz.....0..0i30j0i10i30j0i8i30j33i160j33i10.IVCkYiE3e5w
