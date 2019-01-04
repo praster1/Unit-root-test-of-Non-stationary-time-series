@@ -72,8 +72,7 @@
                   result = lm(z.diff ~ z.lag.1 + 1 + z.diff.lag)
                 if (type == "trend") 
                   result = lm(z.diff ~ z.lag.1 + 1 + tt + z.diff.lag)
-                critRes[i] = AIC(result, k = switch(selectlags, 
-                  AIC = 2, BIC = log(length(z.diff))))
+                critRes[i] = AIC(result, k = switch(selectlags, AIC = 2, BIC = log(length(z.diff))))
             }
             lags = which.min(critRes)
         }
