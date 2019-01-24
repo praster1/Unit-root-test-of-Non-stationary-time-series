@@ -309,13 +309,13 @@ source("plotUnitRootTest_urpp.R")
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, lwd=3)       ### Unit Root Test
 
 
 source("plotUnitRootTest_urers.R")
@@ -323,13 +323,13 @@ source("plotUnitRootTest_urers.R")
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='trend', lag.max=4)        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS: Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, lwd=3, testReverse=TRUE)       ### Unit Root Test
 
 # ERS Test: DF-GLS: Constant
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='DF-GLS', model='constant', lag.max=4)        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: DF-GLS: Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=2, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, lwd=3, testReverse=TRUE)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend')                            
