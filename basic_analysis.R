@@ -202,6 +202,14 @@ for (i in 1:length(uniq))
 dataVec = as.numeric(t(as.matrix(newData[[1]][,6:29])))
 datetime = seqDatetime_byLength(startDate="2006-01-01", length=length(dataVec), split=24)   # 15분씩 나뉘어있으므로 split=96
 
+# imputation
+NAwhichs = which(is.na(dataVec))
+for (i in 1:length(NAwhichs))
+{
+	dataVec[NAwhichs[i]] = (dataVec[NAwhichs[i]-1] + dataVec[NAwhichs[i]-2])/2
+}
+summary(dataVec)
+
 # indexVec = getUniqVec(datetime, index="YYYYMMDDHH")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
 # res = getCalcVec(dataVec, indexVec, calc="sum")
 # temp = cbind(indexVec, res)
@@ -234,16 +242,16 @@ datetime = seqDatetime_byLength(startDate="2006-01-01", length=length(dataVec), 
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
 
 ### for Trend Test
-partialLen_Trend = 96*14
-stepSize_Trend = 96
+partialLen_Trend = 24*14
+stepSize_Trend = 24
 signif_Trend = 0.001
 
 sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
 
 
 ### for Unit Root Test
-partialLen_UnitRoot = 96*3.5
-stepSize_UnitRoot = 96
+partialLen_UnitRoot = 24*3.5
+stepSize_UnitRoot = 24
 
 
 
@@ -269,13 +277,13 @@ ylab = "X"
 par(mfrow = c(7, 2))
 source("plotUnitRootTest_urdf.R")
 # ADF Test: Trend
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='trend')                                        
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=24, type='trend')                                        
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3, lwd=3)       ### Unit Root Test
 
 # ADF Test: Drift
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=96, type='drift')                                         
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=24, type='drift')                                         
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ADF Test: Drift")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3, lwd=3)       ### Unit Root Test
@@ -283,25 +291,25 @@ plotUnitRootTest_urdf(sampleVec_UnitRoot, analysisResult=analysisRes, critVal=3,
 
 source("plotUnitRootTest_urpp.R")
 # PP Test: Trend    #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=96)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='trend', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=96)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-alpha', model='constant', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-alpha, constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=3, lwd=3)       ### Unit Root Test
 
 # PP Test: Trend    #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=96)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='trend', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, Trend")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
 
 # PP Test: constant     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=96)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.pp, type='Z-tau', model='constant', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="PP Test: Z-tau, constant")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urpp(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
@@ -349,13 +357,13 @@ plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, lwd=3)       ### Unit Roo
 
 source("plotUnitRootTest_urkpss.R")
 # KPSS Test: mu     #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=96)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: mu")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
 
 # KPSS Test: tau        #
-analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=96)
+analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
 plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
