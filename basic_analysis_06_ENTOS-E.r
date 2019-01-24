@@ -335,13 +335,13 @@ plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=3, lwd=3, testRe
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='trend')                            
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3, testReverse=TRUE)       ### Unit Root Test
 
 # ERS Test: P-Test      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.ers, type='P-test', model='constant')                            
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="ERS Test: P-Test")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urers(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3, testReverse=TRUE)       ### Unit Root Test
 
 
 source("plotUnitRootTest_ursp.R")
@@ -349,13 +349,13 @@ source("plotUnitRootTest_ursp.R")
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='tau', pol.deg=4, signif=0.000001)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: tau")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, lwd=3)       ### Unit Root Test
+plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, lwd=3, testReverse=TRUE)       ### Unit Root Test
 
 # SP Test: rho      #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.sp, type='rho', pol.deg=4, signif=0.00001)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="SP Test: rho")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, lwd=3)       ### Unit Root Test
+plotUnitRootTest_ursp(sampleVec_UnitRoot, analysisRes, lwd=3, testReverse=TRUE)       ### Unit Root Test
 
 
 source("plotUnitRootTest_urkpss.R")
@@ -363,10 +363,10 @@ source("plotUnitRootTest_urkpss.R")
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='mu', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: mu")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3, testReverse=TRUE)       ### Unit Root Test
 
 # KPSS Test: tau        #
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.kpss, type='tau', use.lag=24)
 plotAll(dataVec, datetime, xlab=xlab, ylab=ylab, main="KPSS Test: tau")
 plotTrendTest(sampleVec_Trend, type="none", signIf=signif_Trend)     ### Trend Test
-plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3)       ### Unit Root Test
+plotUnitRootTest_urkpss(sampleVec_UnitRoot, analysisRes, critVal=1, lwd=3, testReverse=TRUE)       ### Unit Root Test
