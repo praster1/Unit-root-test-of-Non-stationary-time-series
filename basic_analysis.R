@@ -16,18 +16,18 @@ source("seqDatetime_byLength.R")    # 시작일(startDate)부터 길이(length)�
 source("getUniqVec.R")  # datetime의 index를 구하는 함수       # getUniqVec(datetimeVec, index="YYYYMMDDHHMMDD")
 source("getCalcVec.R")  # split의 시작값, 종료값, 평균값, 중앙값 등을 구하는 함수       # getCalcVec(dataVec, datetimeIndexVec, calc="last")
 
-
-
-
-
-dataLen = 96*365*3      # 105120
-
-
-
-
-
 set.seed(123456)
+
+
+
+
+
+
+
+
+
 ##### Simulation of a random time series
+dataLen = 96*365*3      # 105120
 par(mfrow = c(6, 1))
 
 source("synthetic_pureRP.R")
@@ -158,6 +158,8 @@ for (i in 1:10)
 
 
 
+
+
 ##### Autoregressive moving average process: ARMA(p,q)
 # source("synthetic_ARMA11.R")
 # dataVec = synthetic_ARMA11(initVal = 1000, coefAR=-0.45, coefMA=-0.45, mean = 0, sd = 1, length = dataLen)
@@ -177,6 +179,30 @@ for (i in 1:10)
 datetime = seqDatetime_byLength(startDate="2015-09-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
 
 # indexVec = getUniqVec(datetime, index="YYYYMMDDHHMM")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
+# res = getCalcVec(dataVec, indexVec, calc="sum")
+# temp = cbind(indexVec, res)
+# dataVec = as.numeric(temp[,2])
+
+
+
+
+
+##### ENTOS-E 데이터
+### 데이터 출처: https://www.entsoe.eu/data/data-portal/?fbclid=IwAR3OF_cAHJN4Xbg2C54j_gvMflY42oS-Liijqye64lpdq1D-8nZSaFeaXgI
+### 2006년 1월 1일 1시 1분부터 2015년 12월 31일까지, 1시간 단위
+data = read.csv("./datasets/ENTOS-E_Monthly-hourly-load-values_2006-2015.csv")
+uniq = unique(data[1,])
+newData = list()
+
+
+#AT BA BE BG CH CS CY CZ DE DK DK_W EE ES FI FR GB GR HR HU IE IS IT LT LU LV ME MK NI NL NO PL PT RO RS SE SI SK UA_W
+
+
+
+dataVec = data[,5]
+datetime = seqDatetime_byLength(startDate="2006-01-01", length=length(dataVec), split=96)   # 15분씩 나뉘어있으므로 split=96
+
+# indexVec = getUniqVec(datetime, index="YYYYMMDDHH")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
 # res = getCalcVec(dataVec, indexVec, calc="sum")
 # temp = cbind(indexVec, res)
 # dataVec = as.numeric(temp[,2])
