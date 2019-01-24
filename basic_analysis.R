@@ -199,21 +199,23 @@ for (i in 1:length(uniq))
 }
 
 # AT BA BE BG CH CS CY CZ DE DK DK_W EE ES FI FR GB GR HR HU IE IS IT LT LU LV ME MK NI NL NO PL PT RO RS SE SI SK UA_W
-dataVec = as.numeric(t(as.matrix(newData[[1]][,6:29])))
+dataVec = as.numeric(t(as.matrix(newData[[5]][,6:29])))
 datetime = seqDatetime_byLength(startDate="2006-01-01", length=length(dataVec), split=24)   # 15분씩 나뉘어있으므로 split=96
 
-# imputation
+### Imputation
 NAwhichs = which(is.na(dataVec))
+NAwhichs
+
+## Imputation: 값을 전부 (이전값 + 이후값)/2로 대체
 for (i in 1:length(NAwhichs))
 {
 	dataVec[NAwhichs[i]] = (dataVec[NAwhichs[i]-1] + dataVec[NAwhichs[i]-2])/2
 }
-summary(dataVec)
 
-# indexVec = getUniqVec(datetime, index="YYYYMMDDHH")   # 1일 단위로 하려면 YYYYMMDD / 1시간 단위로 하려면 YYYYMMDDHH / 15분 단위로 하려면 YYYYMMDDHHMM
-# res = getCalcVec(dataVec, indexVec, calc="sum")
-# temp = cbind(indexVec, res)
-# dataVec = as.numeric(temp[,2])
+## Imputation: 값을 전부 1로 대체
+# dataVec[NAwhichs] = 1
+
+summary(dataVec)
 
 
 
@@ -234,24 +236,25 @@ summary(dataVec)
                       
                       
                       
-                      
-                      
-                      
+# plot(dataVec, type="l")
+# points(changeIndex, dataVec[changeIndex], col="red", lwd=5)
+                                            
+                     
                       
 ##### Sample Vector 리스트 구하기
 source("getPartialData.R")  # dataVec을 stepSize만큼 건너뛰면서 partialLength씩 자른다.
 
 ### for Trend Test
-partialLen_Trend = 24*14
+partialLen_Trend = 24*24
 stepSize_Trend = 24
-signif_Trend = 0.001
+signif_Trend = 0.0001
 
 sampleVec_Trend = getPartialData(dataVec, partialLength=partialLen_Trend, stepSize=stepSize_Trend)
 
 
 ### for Unit Root Test
-partialLen_UnitRoot = 24*3.5
-stepSize_UnitRoot = 24
+partialLen_UnitRoot = 24*7
+stepSize_UnitRoot = 8
 
 
 
@@ -265,16 +268,14 @@ library(urca)
 source("plotAll.R")
 source("plotTrendTest.R")
 
-par(mfrow = c(6, 2))
+# par(mfrow = c(7, 2))
+par(mfrow = c(2, 1))
 plotAll(dataVec, datetime)
 
 xlab = "Time Index"
 ylab = "X"
 
 
-
-
-par(mfrow = c(7, 2))
 source("plotUnitRootTest_urdf.R")
 # ADF Test: Trend
 analysisRes = lapply(sampleVec_UnitRoot$data, ur.df, lags=24, type='trend')                                        
