@@ -266,11 +266,12 @@ sampleVec_UnitRoot = getPartialData(dataVec, partialLength=partialLen_UnitRoot, 
 
 
 
+
 library(urca)
 source("plotAll.R")
 source("plotTrendTest.R")
 
-par(mfrow = c(6, 2))
+par(mfrow = c(6, 1))
 plotAll(dataVec, datetime)
 
 xlab = "Time Index"
